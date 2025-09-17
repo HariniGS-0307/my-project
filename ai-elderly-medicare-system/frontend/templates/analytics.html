@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - AI Elderly Medicare System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --secondary-gradient: linear-gradient(135deg, #ff057c 0%, #8d0b93 100%);
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --card-border: rgba(255, 255, 255, 0.2);
+            --text-light: rgba(255, 255, 255, 0.9);
+            --text-muted-light: rgba(255, 255, 255, 0.7);
+            --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary-gradient);
+            color: var(--text-light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--secondary-gradient);
+            clip-path: circle(30% at right 70%);
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff057c 0%, #7c64d5 100%);
+            clip-path: circle(20% at left 20%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-light);
+            color: var(--text-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 16px;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+        }
+        
+        .text-muted {
+            color: var(--text-muted-light) !important;
+        }
+        
+        .bg-indicator {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 8px 15px;
+            display: inline-block;
+        }
+        
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .progress {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .progress-bar {
+            border-radius: 10px;
+        }
+        
+        .table {
+            color: var(--text-light);
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--text-muted-light);
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-light);
+            border: none;
+        }
+        
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .dropdown-menu {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(106, 17, 203, 0.1);
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.8em;
+        }
+        
+        .stat-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            z-index: -1;
+        }
+        
+        /* Animation for cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glass-card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        /* Delayed animations for cards */
+        .glass-card:nth-child(1) { animation-delay: 0.1s; }
+        .glass-card:nth-child(2) { animation-delay: 0.2s; }
+        .glass-card:nth-child(3) { animation-delay: 0.3s; }
+        .glass-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-4 mb-4">
+            <div>
+                <h1 class="h2 mb-1">Analytics Dashboard</h1>
+                <p class="mb-0">AI-powered insights for elderly patient care</p>
+            </div>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-glass">
+                        <i class="fas fa-download me-1"></i> Export Data
+                    </button>
+                    <button type="button" class="btn btn-glass">
+                        <i class="fas fa-calendar me-1"></i> Schedule Report
+                    </button>
+                </div>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-glass dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fas fa-filter me-1"></i> Last 30 days
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Last 7 days</a></li>
+                        <li><a class="dropdown-item" href="#">Last 30 days</a></li>
+                        <li><a class="dropdown-item" href="#">Last 90 days</a></li>
+                        <li><a class="dropdown-item" href="#">Custom range</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-card stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-1">Total Revenue</h6>
+                                <h3 class="card-title">$124,560</h3>
+                                <div class="mt-3">
+                                    <span class="bg-indicator">
+                                        <i class="fas fa-arrow-up text-success me-1"></i>
+                                        <span class="text-success">12.5%</span>
+                                        <span class="text-muted-light ms-1">vs last month</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="metric-icon bg-primary bg-opacity-25 text-primary">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-card stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-1">Patient Satisfaction</h6>
+                                <h3 class="card-title">4.8/5.0</h3>
+                                <div class="mt-3">
+                                    <span class="bg-indicator">
+                                        <i class="fas fa-arrow-up text-success me-1"></i>
+                                        <span class="text-success">3.2%</span>
+                                        <span class="text-muted-light ms-1">vs last month</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="metric-icon bg-success bg-opacity-25 text-success">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-card stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-1">Medication Adherence</h6>
+                                <h3 class="card-title">92.4%</h3>
+                                <div class="mt-3">
+                                    <span class="bg-indicator">
+                                        <i class="fas fa-arrow-up text-success me-1"></i>
+                                        <span class="text-success">5.7%</span>
+                                        <span class="text-muted-light ms-1">vs last month</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="metric-icon bg-info bg-opacity-25 text-info">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-card stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-1">Avg. Response Time</h6>
+                                <h3 class="card-title">2.4 hrs</h3>
+                                <div class="mt-3">
+                                    <span class="bg-indicator">
+                                        <i class="fas fa-arrow-up text-danger me-1"></i>
+                                        <span class="text-danger">0.3 hrs</span>
+                                        <span class="text-muted-light ms-1">vs last month</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="metric-icon bg-warning bg-opacity-25 text-warning">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-xl-8 col-lg-7 mb-4">
+                <div class="glass-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center border-0 pb-0">
+                        <h5 class="mb-0">Patient Engagement Over Time</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Filter
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Last 7 days</a></li>
+                                <li><a class="dropdown-item" href="#">Last 30 days</a></li>
+                                <li><a class="dropdown-item" href="#">Last 90 days</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="engagementChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-lg-5 mb-4">
+                <div class="glass-card h-100">
+                    <div class="card-header border-0 pb-0">
+                        <h5 class="mb-0">Service Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="serviceChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="glass-card">
+                    <div class="card-header border-0">
+                        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#caregivers" type="button" role="tab">
+                                    Top Caregivers
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#medications" type="button" role="tab">
+                                    Medication Effectiveness
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#patients" type="button" role="tab">
+                                    Patient Demographics
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <!-- Caregivers Tab -->
+                            <div class="tab-pane fade show active" id="caregivers" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Top Performing Caregivers</h5>
+                                    <button class="btn btn-glass btn-sm">
+                                        <i class="fas fa-download me-1"></i> Export
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Caregiver</th>
+                                                <th>Patients</th>
+                                                <th>Satisfaction</th>
+                                                <th>Completion Rate</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" class="rounded-circle me-2" width="32" height="32">
+                                                        <div>John Doe</div>
+                                                    </div>
+                                                </td>
+                                                <td>42</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-1">4.9</span>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 98%"></div>
+                                                        </div>
+                                                        <small>98%</small>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://ui-avatars.com/api/?name=Sarah+Smith&background=random" class="rounded-circle me-2" width="32" height="32">
+                                                        <div>Sarah Smith</div>
+                                                    </div>
+                                                </td>
+                                                <td>38</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-1">4.7</span>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
+                                                        </div>
+                                                        <small>92%</small>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://ui-avatars.com/api/?name=Michael+Brown&background=random" class="rounded-circle me-2" width="32" height="32">
+                                                        <div>Michael Brown</div>
+                                                    </div>
+                                                </td>
+                                                <td>45</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-1">4.6</span>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 89%"></div>
+                                                        </div>
+                                                        <small>89%</small>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-warning">On Leave</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Medications Tab -->
+                            <div class="tab-pane fade" id="medications" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Medication Effectiveness</h5>
+                                    <button class="btn btn-glass btn-sm">
+                                        <i class="fas fa-download me-1"></i> Export
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Medication</th>
+                                                <th>Prescribed</th>
+                                                <th>Adherence Rate</th>
+                                                <th>Effectiveness</th>
+                                                <th>Trend</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Metformin</td>
+                                                <td>124</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 94%"></div>
+                                                        </div>
+                                                        <small>94%</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success">High</span>
+                                                </td>
+                                                <td><i class="fas fa-arrow-up text-success"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lisinopril</td>
+                                                <td>89</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 76%"></div>
+                                                        </div>
+                                                        <small>76%</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-warning">Medium</span>
+                                                </td>
+                                                <td><i class="fas fa-arrow-down text-danger"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Atorvastatin</td>
+                                                <td>67</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 91%"></div>
+                                                        </div>
+                                                        <small>91%</small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success">High</span>
+                                                </td>
+                                                <td><i class="fas fa-arrow-up text-success"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Patients Tab -->
+                            <div class="tab-pane fade" id="patients" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Patient Demographics</h5>
+                                    <button class="btn btn-glass btn-sm">
+                                        <i class="fas fa-download me-1"></i> Export
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="glass-card p-3 mb-3">
+                                            <h6>Age Distribution</h6>
+                                            <canvas id="ageChart" height="200"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="glass-card p-3 mb-3">
+                                            <h6>Condition Prevalence</h6>
+                                            <canvas id="conditionChart" height="200"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Indicators -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="glass-card">
+                    <div class="card-header border-0">
+                        <h5 class="mb-0">Operational Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="glass-card p-3 text-center h-100">
+                                    <div class="metric-icon bg-primary bg-opacity-25 text-primary mx-auto mb-3">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <h4 class="text-primary">98.2%</h4>
+                                    <p class="mb-1">On-time Deliveries</p>
+                                    <small class="text-muted">Target: 95%</small>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="glass-card p-3 text-center h-100">
+                                    <div class="metric-icon bg-success bg-opacity-25 text-success mx-auto mb-3">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <h4 class="text-success">4.7/5</h4>
+                                    <p class="mb-1">Care Quality Rating</p>
+                                    <small class="text-muted">Target: 4.5+</small>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="glass-card p-3 text-center h-100">
+                                    <div class="metric-icon bg-info bg-opacity-25 text-info mx-auto mb-3">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <h4 class="text-info">18 min</h4>
+                                    <p class="mb-1">Avg. Response Time</p>
+                                    <small class="text-muted">Target: <20 min</small>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="glass-card p-3 text-center h-100">
+                                    <div class="metric-icon bg-warning bg-opacity-25 text-warning mx-auto mb-3">
+                                        <i class="fas fa-hospital-user"></i>
+                                    </div>
+                                    <h4 class="text-warning">3.2%</h4>
+                                    <p class="mb-1">Readmission Rate</p>
+                                    <small class="text-muted">Target: <5%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Predictions Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="glass-card">
+                    <div class="card-header border-0 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">AI-Powered Predictions & Recommendations</h5>
+                        <button class="btn btn-glass btn-sm">
+                            <i class="fas fa-robot me-1"></i> Generate Report
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h6>Medication Adherence Forecast</h6>
+                                <div class="glass-card p-3">
+                                    <canvas id="adherenceForecastChart" height="200"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h6>Patient Risk Assessment</h6>
+                                <div class="glass-card p-3">
+                                    <canvas id="riskChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h6 class="mb-3">AI Recommendations</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="glass-card p-3 h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="metric-icon bg-info bg-opacity-25 text-info me-3">
+                                            <i class="fas fa-bell"></i>
+                                        </div>
+                                        <h6 class="mb-0">Reminder Optimization</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted">Adjust medication reminders for 23 patients to improve adherence rates by 15%.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="glass-card p-3 h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="metric-icon bg-warning bg-opacity-25 text-warning me-3">
+                                            <i class="fas fa-user-md"></i>
+                                        </div>
+                                        <h6 class="mb-0">Caregiver Allocation</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted">Reassign 5 caregivers to optimize route efficiency and reduce response time.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="glass-card p-3 h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="metric-icon bg-success bg-opacity-25 text-success me-3">
+                                            <i class="fas fa-pills"></i>
+                                        </div>
+                                        <h6 class="mb-0">Inventory Management</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted">Increase stock of Metformin by 20% based on predicted demand for next month.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Patient Engagement Chart
+            const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+            const engagementChart = new Chart(engagementCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [
+                        {
+                            label: 'App Usage',
+                            data: [65, 78, 82, 90],
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Medication Adherence',
+                            data: [72, 79, 85, 92],
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Appointment Attendance',
+                            data: [80, 85, 88, 94],
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.9)'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Service Distribution Chart
+            const serviceCtx = document.getElementById('serviceChart').getContext('2d');
+            const serviceChart = new Chart(serviceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Medication Delivery', 'Health Monitoring', 'Care Visits', 'Teleconsultations', 'Emergency Response'],
+                    datasets: [{
+                        data: [40, 25, 15, 12, 8],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.9)',
+                                padding: 15
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Age Distribution Chart
+            const ageCtx = document.getElementById('ageChart').getContext('2d');
+            const ageChart = new Chart(ageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['65-70', '71-75', '76-80', '81-85', '86+'],
+                    datasets: [{
+                        label: 'Patients',
+                        data: [120, 85, 70, 45, 30],
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Condition Prevalence Chart
+            const conditionCtx = document.getElementById('conditionChart').getContext('2d');
+            const conditionChart = new Chart(conditionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Hypertension', 'Diabetes', 'Arthritis', 'Heart Disease', 'Other'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.9)',
+                                padding: 15
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Adherence Forecast Chart
+            const adherenceForecastCtx = document.getElementById('adherenceForecastChart').getContext('2d');
+            const adherenceForecastChart = new Chart(adherenceForecastCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Actual',
+                            data: [85, 82, 84, 87, 86, 88, 90, 89, 91, null, null, null],
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            tension: 0.3,
+                            fill: false
+                        },
+                        {
+                            label: 'Forecast',
+                            data: [null, null, null, null, null, null, null, null, 91, 93, 94, 95],
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            borderDash: [5, 5],
+                            tension: 0.3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.9)'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 80,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Risk Assessment Chart
+            const riskCtx = document.getElementById('riskChart').getContext('2d');
+            const riskChart = new Chart(riskCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Medication Non-Adherence', 'Falls Risk', 'Social Isolation', 'Cognitive Decline', 'Nutritional Risk'],
+                    datasets: [{
+                        label: 'Current Month',
+                        data: [25, 40, 35, 20, 30],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                    }, {
+                        label: 'Previous Month',
+                        data: [35, 45, 40, 30, 35],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.9)'
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: 'rgba(255, 255, 255, 0.9)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

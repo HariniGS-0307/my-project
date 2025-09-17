@@ -1,0 +1,209 @@
+{% extends "base/base.html" %}
+
+{% block title %}Patient Profile - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Patient Profile</h4>
+                        <a href="{{ url_for('patient.edit_patient', patient_id=patient.id) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <img src="{{ url_for('static', filename='img/profile-placeholder.png') }}" 
+                                     class="rounded-circle img-fluid" alt="Patient Photo" style="width: 150px; height: 150px;">
+                                <h3 class="mt-3">{{ patient.first_name }} {{ patient.last_name }}</h3>
+                                <p class="text-muted">Patient ID: {{ patient.id }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Personal Information</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Date of Birth:</strong></td>
+                                            <td>{{ patient.date_of_birth.strftime('%B %d, %Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Age:</strong></td>
+                                            <td>{{ patient.age }} years</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Gender:</strong></td>
+                                            <td>{{ patient.gender }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Phone:</strong></td>
+                                            <td>{{ patient.phone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>{{ patient.email }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h5>Contact Information</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Address:</strong></td>
+                                            <td>{{ patient.address }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Emergency Contact:</strong></td>
+                                            <td>{{ patient.emergency_contact_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Emergency Phone:</strong></td>
+                                            <td>{{ patient.emergency_contact_phone }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <h5>Medical Information</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Medical Conditions:</strong></p>
+                                            <p>{{ patient.medical_conditions or 'None reported' }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Allergies:</strong></p>
+                                            <p>{{ patient.allergies or 'None reported' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button" role="tab">
+                                        <i class="fas fa-calendar-check"></i> Appointments
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="medications-tab" data-bs-toggle="tab" data-bs-target="#medications" type="button" role="tab">
+                                        <i class="fas fa-pills"></i> Medications
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="health-records-tab" data-bs-toggle="tab" data-bs-target="#health-records" type="button" role="tab">
+                                        <i class="fas fa-file-medical"></i> Health Records
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="patientTabsContent">
+                                <div class="tab-pane fade show active" id="appointments" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date & Time</th>
+                                                    <th>Doctor</th>
+                                                    <th>Type</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>June 15, 2023 - 10:00 AM</td>
+                                                    <td>Dr. Smith</td>
+                                                    <td>Cardiology Checkup</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>June 22, 2023 - 2:30 PM</td>
+                                                    <td>Dr. Johnson</td>
+                                                    <td>General Checkup</td>
+                                                    <td><span class="badge bg-warning">Scheduled</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="medications" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Medication</th>
+                                                    <th>Dosage</th>
+                                                    <th>Frequency</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Lisinopril</td>
+                                                    <td>10mg</td>
+                                                    <td>Once daily</td>
+                                                    <td><span class="badge bg-success">Active</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Metformin</td>
+                                                    <td>500mg</td>
+                                                    <td>Twice daily</td>
+                                                    <td><span class="badge bg-success">Active</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="health-records" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Type</th>
+                                                    <th>Value</th>
+                                                    <th>Notes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>June 15, 2023</td>
+                                                    <td>Blood Pressure</td>
+                                                    <td>120/80 mmHg</td>
+                                                    <td>Normal reading</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>June 15, 2023</td>
+                                                    <td>Blood Sugar</td>
+                                                    <td>95 mg/dL</td>
+                                                    <td>Fasting level</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

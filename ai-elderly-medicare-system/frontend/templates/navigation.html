@@ -1,0 +1,237 @@
+<!-- Navigation Sidebar -->
+<nav class="sidebar" id="mainSidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <h2>MediCare AI</h2>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <div class="sidebar-content">
+        <ul class="nav-links">
+        <li>
+            <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="patients.html">
+                <i class="fas fa-user-injured"></i>
+                <span>Patients</span>
+                <span class="menu-badge">24</span>
+            </a>
+        </li>
+        <li>
+            <a href="medications.html">
+                <i class="fas fa-pills"></i>
+                <span>Medications</span>
+            </a>
+        </li>
+        <li>
+            <a href="schedule.html">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Schedule</span>
+                <span class="menu-badge">5</span>
+            </a>
+        </li>
+        <li class="menu-category">Health Management</li>
+        <li>
+            <a href="reminders.html">
+                <i class="fas fa-bell"></i>
+                <span>Reminders</span>
+                <span class="menu-badge">18</span>
+            </a>
+        </li>
+        <li>
+            <a href="supply-chain.html">
+                <i class="fas fa-truck"></i>
+                <span>Supply Chain</span>
+            </a>
+        </li>
+        <li>
+            <a href="health-monitor.html">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health Monitor</span>
+            </a>
+        </li>
+        <li class="menu-category">Analytics</li>
+        <li>
+            <a href="analytics.html">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+        </li>
+        <li>
+            <a href="reports.html">
+                <i class="fas fa-file-alt"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+        <li>
+            <a href="prescriptions.html">
+                <i class="fas fa-prescription"></i>
+                <span>Prescriptions</span>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </li>
+        <li>
+            <a href="help-support.html">
+                <i class="fas fa-question-circle"></i>
+                <span>Help & Support</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Navigation Script -->
+<script>
+    // Make toggleSidebar globally available
+    window.toggleSidebar = function() {
+        const sidebar = document.getElementById('mainSidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        
+        if (sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            if (overlay) {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300);
+            }
+        } else {
+            sidebar.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (overlay) {
+                overlay.style.display = 'block';
+                // Trigger reflow
+                void overlay.offsetWidth;
+                overlay.style.opacity = '1';
+            }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get elements
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('mainSidebar');
+        
+        // Create overlay if it doesn't exist
+        let overlay = document.querySelector('.sidebar-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            
+            // Close sidebar when clicking on overlay
+            overlay.addEventListener('click', function() {
+                window.toggleSidebar();
+            });
+        }
+        
+        // Add event listeners if elements exist
+        if (menuToggle && sidebar) {
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                window.toggleSidebar();
+            });
+            
+            // Highlight current page in navigation
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                    let parent = link.closest('.has-submenu');
+                    while (parent) {
+                        parent.classList.add('expanded');
+                        parent = parent.parentElement.closest('.has-submenu');
+                    }
+                }
+            });
+
+            // Toggle submenus on mobile
+            document.querySelectorAll('.has-submenu > a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 992) {
+                        e.preventDefault();
+                        this.parentElement.classList.toggle('expanded');
+                    }
+                });
+            });
+
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+    });
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(e) {
+        const sidebar = document.getElementById('mainSidebar');
+        const menuToggle = document.getElementById('menuToggle');
+        
+        if (window.innerWidth <= 992 && 
+            sidebar && 
+            sidebar.classList.contains('active') && 
+            !sidebar.contains(e.target) && 
+            e.target !== menuToggle && 
+            !menuToggle.contains(e.target)) {
+            
+            window.toggleSidebar();
+        }
+    });
+
+    // Handle window resize
+    function handleResize() {
+        const sidebar = document.getElementById('mainSidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        
+        if (window.innerWidth > 992) {
+            // On desktop, ensure sidebar is always visible
+            sidebar.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            if (overlay) {
+                overlay.style.display = 'none';
+                overlay.style.opacity = '0';
+            }
+        }
+    }
+    
+    // Initial check
+    handleResize();
+    
+    // Add resize listener
+    window.addEventListener('resize', handleResize);
+    
+    // Close sidebar when navigating to a new page on mobile
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 992) {
+            const navLink = e.target.closest('.nav-links a');
+            if (navLink && !navLink.classList.contains('has-submenu')) {
+                window.toggleSidebar();
+            }
+        }
+    });
+</script>

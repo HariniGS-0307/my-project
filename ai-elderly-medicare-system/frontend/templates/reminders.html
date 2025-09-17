@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - AI-Powered Medication Reminders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --primary-dark: #4B0082;
+            --primary-light: #9370DB;
+            --secondary: #FF6B8B;
+            --accent: #FFA500;
+            --light: rgba(255, 255, 255, 0.85);
+            --dark: #2F1B4B;
+            --success: #00C9A7;
+            --warning: #FFC75F;
+            --danger: #FF8066;
+            --info: #4FC4F7;
+            --gray: #8395a7;
+            --light-gray: rgba(236, 240, 241, 0.5);
+            --sidebar-width: 280px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #8A2BE2, #4B0082, #FF6B8B, #FFA500, #9370DB);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 40px);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(43, 7, 89, 0.5);
+            color: white;
+            backdrop-filter: blur(15px);
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+            position: relative;
+            height: 100%;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(107, 36, 178, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .sidebar-header img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary-light);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item i {
+            width: 25px;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 30px;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid var(--accent);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .page-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .header-tools {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 10px 20px;
+            width: 300px;
+            transition: var(--transition);
+        }
+
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-light);
+            color: var(--light);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-select option {
+            background: var(--dark);
+            color: white;
+        }
+
+        /* Reminders List */
+        .reminders-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+        }
+
+        .reminders-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .list-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .reminder-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .reminder-item:last-child {
+            border-bottom: none;
+        }
+
+        .reminder-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .reminder-checkbox {
+            margin-top: 3px;
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .reminder-content {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reminder-title.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .reminder-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .reminder-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .reminder-date, .reminder-category {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Priority Indicators */
+        .priority-high { color: var(--danger); }
+        .priority-medium { color: var(--warning); }
+        .priority-low { color: var(--success); }
+
+        /* Sidebar */
+        .reminder-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stats-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 5px 0;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Add Reminder Form */
+        .add-reminder-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Notification Panel */
+        .notification-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 15px 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 350px;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .notification-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Upcoming Reminders */
+        .upcoming-reminders {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .upcoming-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .upcoming-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .upcoming-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .upcoming-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .upcoming-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .upcoming-time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--accent);
+        }
+
+        .upcoming-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .upcoming-patient {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .reminders-container {
+                grid-template-columns: 1fr;
+            }
+
+            .reminder-sidebar {
+                grid-row: 1;
+                grid-template-columns: 1fr 1fr;
+                display: grid;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-group {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .reminder-sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .reminder-meta {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .header-tools {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 80px;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+
+            .sidebar.active {
+                max-height: 1000px;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 30px;
+                left: 30px;
+                z-index: 1001;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(10px, 10px) rotate(5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c3e50;
+        color: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 20px 0;
+        overflow-y: auto;
+    }
+
+    .logo {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .logo h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-links li {
+        margin: 5px 0;
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .nav-links a.active {
+        background: #3498db;
+        color: white;
+        border-left: 4px solid #fff;
+    }
+
+    .nav-links a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 15px 0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .sidebar {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .logo h2, .nav-links span {
+            display: none;
+        }
+
+        .nav-links a {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .nav-links a i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+    }
+    </style>
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="css/navigation.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+            <!-- Navigation will be loaded here -->
+            <div id="nav-placeholder"></div>
+    <!-- Floating Background Elements -->
+    <div class="floating-element" style="width: 200px; height: 200px; top: 5%; left: 5%;"></div>
+    <div class="floating-element" style="width: 150px; height: 150px; bottom: 10%; right: 10%;"></div>
+    <div class="floating-element" style="width: 100px; height: 100px; top: 15%; right: 20%;"></div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <!-- Notifications will be added here dynamically -->
+    </div>
+
+    <div class="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h1>AI-Powered Medication Reminders</h1>
+                    <p>Manage medication schedules with intelligent alerts</p>
+                </div>
+                <div class="header-tools">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search reminders...">
+                    </div>
+                    <button class="btn btn-primary" id="addReminderBtn">
+                        <i class="fas fa-plus"></i> Add Reminder
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <select class="filter-select">
+                            <option>All Categories</option>
+                            <option>Appointments</option>
+                            <option>Medication</option>
+                            <option>Follow-ups</option>
+                            <option>Tasks</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Completed</option>
+                            <option>Overdue</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>Sort by: Due Date</option>
+                            <option>Sort by: Priority</option>
+                            <option>Sort by: Category</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+
+                <div class="reminders-container">
+                    <!-- Main Reminders List -->
+                    <div class="reminders-list">
+                        <div class="list-header">
+                            <h2 class="list-title">Active Medication Reminders</h2>
+                            <span class="text-muted">5 active, 3 completed</span>
+                        </div>
+
+                        <!-- Reminder Item -->
+                        <div class="reminder-item fade-in">
+                            <input type="checkbox" class="reminder-checkbox">
+                            <div class="reminder-content">
+                                <div class="reminder-title">
+                                    <i class="fas fa-pills"></i>
+                                    <span>Metformin - 500mg (After Breakfast)</span>
+                                    <span class="priority-high">
+                                        <i class="fas fa-exclamation-circle"></i> High Priority
+                                    </span>
+                                </div>
+                                <p class="reminder-desc">Patient: John Doe (68), Diabetes Type 2. Take 1 tablet after breakfast.</p>
+                                <div class="reminder-meta">
+                                    <span class="reminder-date">
+                                        <i class="far fa-calendar-alt"></i> Daily at 8:30 AM
+                                    </span>
+                                    <span class="reminder-category">
+                                        <i class="far fa-folder"></i> Medication
+                                    </span>
+                                    <span class="reminder-date">
+                                        <i class="fas fa-sync-alt"></i> Repeats daily
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="reminder-actions">
+                                <button class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Snooze">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                                <button class="action-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- More reminder items would go here -->
+                        <div class="reminder-item fade-in" style="animation-delay: 0.1s;">
+                            <input type="checkbox" class="reminder-checkbox" checked>
+                            <div class="reminder-content">
+                                <div class="reminder-title completed">
+                                    <i class="fas fa-pills"></i>
+                                    <span>Lisinopril - 10mg (Morning)</span>
+                                    <span class="priority-medium">
+                                        <i class="fas fa-exclamation-circle"></i> Medium Priority
+                                    </span>
+                                </div>
+                                <p class="reminder-desc">Patient: Mary Johnson (72), Hypertension. Take 1 tablet in the morning.</p>
+                                <div class="reminder-meta">
+                                    <span class="reminder-date">
+                                        <i class="far fa-calendar-alt"></i> Completed: Today, 8:00 AM
+                                    </span>
+                                    <span class="reminder-category">
+                                        <i class="far fa-folder"></i> Medication
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="reminder-actions">
+                                <button class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="reminder-item fade-in" style="animation-delay: 0.2s;">
+                            <input type="checkbox" class="reminder-checkbox">
+                            <div class="reminder-content">
+                                <div class="reminder-title">
+                                    <i class="fas fa-stethoscope"></i>
+                                    <span>Patient Follow-up: Robert Wilson</span>
+                                    <span class="priority-medium">
+                                        <i class="fas fa-exclamation-circle"></i> Medium Priority
+                                    </span>
+                                </div>
+                                <p class="reminder-desc">Follow up on blood pressure medication effectiveness and side effects.</p>
+                                <div class="reminder-meta">
+                                    <span class="reminder-date">
+                                        <i class="far fa-calendar-alt"></i> Due: Tomorrow, 2:00 PM
+                                    </span>
+                                    <span class="reminder-category">
+                                        <i class="far fa-folder"></i> Follow-up
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="reminder-actions">
+                                <button class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="reminder-item fade-in" style="animation-delay: 0.3s;">
+                            <input type="checkbox" class="reminder-checkbox">
+                            <div class="reminder-content">
+                                <div class="reminder-title">
+                                    <i class="fas fa-pills"></i>
+                                    <span>Atorvastatin - 20mg (Evening)</span>
+                                    <span class="priority-low">
+                                        <i class="fas fa-exclamation-circle"></i> Low Priority
+                                    </span>
+                                </div>
+                                <p class="reminder-desc">Patient: Sarah Miller (65), High Cholesterol. Take 1 tablet in the evening.</p>
+                                <div class="reminder-meta">
+                                    <span class="reminder-date">
+                                        <i class="far fa-calendar-alt"></i> Daily at 8:00 PM
+                                    </span>
+                                    <span class="reminder-category">
+                                        <i class="far fa-folder"></i> Medication
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="reminder-actions">
+                                <button class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Snooze">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                                <button class="action-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="reminder-sidebar">
+                        <!-- Stats Card -->
+                        <div class="stats-card">
+                            <div class="stats-header">
+                                <h3 class="stats-title">Reminder Analytics</h3>
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value">24</div>
+                                    <div class="stat-label">Total Reminders</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" style="color: var(--success);">18</div>
+                                    <div class="stat-label">Active</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" style="color: var(--warning);">4</div>
+                                    <div class="stat-label">Due Soon</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" style="color: var(--danger);">2</div>
+                                    <div class="stat-label">Overdue</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Reminder Form -->
+                        <div class="add-reminder-form">
+                            <h3 class="stats-title">Add New Reminder</h3>
+                            <form id="newReminderForm">
+                                <div class="form-group">
+                                    <label for="reminderTitle">Medication Name</label>
+                                    <input type="text" id="reminderTitle" class="form-control" placeholder="e.g., Metformin 500mg" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reminderDesc">Instructions</label>
+                                    <textarea id="reminderDesc" class="form-control" placeholder="Dosage instructions, patient notes..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patientSelect">Patient</label>
+                                    <select id="patientSelect" class="form-control">
+                                        <option>John Doe</option>
+                                        <option>Mary Johnson</option>
+                                        <option>Robert Wilson</option>
+                                        <option>Sarah Miller</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reminderDate">Start Date & Time</label>
+                                    <input type="datetime-local" id="reminderDate" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reminderFrequency">Frequency</label>
+                                    <select id="reminderFrequency" class="form-control">
+                                        <option>Once</option>
+                                        <option>Daily</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reminderPriority">Priority</label>
+                                    <select id="reminderPriority" class="form-control">
+                                        <option value="low">Low</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reminderCategory">Category</label>
+                                    <select id="reminderCategory" class="form-control">
+                                        <option>Medication</option>
+                                        <option>Appointment</option>
+                                        <option>Follow-up</option>
+                                        <option>Check-up</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-outline">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save Reminder</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Reminders Section -->
+                <div class="upcoming-reminders">
+                    <div class="upcoming-header">
+                        <h2 class="upcoming-title">Upcoming Reminders Today</h2>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-calendar"></i> View Calendar
+                        </button>
+                    </div>
+                    <div class="upcoming-list">
+                        <div class="upcoming-item">
+                            <div class="upcoming-time">10:00 AM</div>
+                            <div class="upcoming-desc">Aspirin 81mg - After breakfast</div>
+                            <div class="upcoming-patient">
+                                <i class="fas fa-user-injured"></i> Robert Wilson
+                            </div>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="upcoming-time">12:30 PM</div>
+                            <div class="upcoming-desc">Metoprolol 50mg - With lunch</div>
+                            <div class="upcoming-patient">
+                                <i class="fas fa-user-injured"></i> Sarah Miller
+                            </div>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="upcoming-time">2:00 PM</div>
+                            <div class="upcoming-desc">
+                                Weekly check-up appointment
+                            </div>
+                            <div class="upcoming-patient">
+                                <i class="fas fa-user-injured"></i> John Doe
+                            </div>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="upcoming-time">6:00 PM</div>
+                            <div class="upcoming-desc">Warfarin 5mg - With dinner</div>
+                            <div class="upcoming-patient">
+                                <i class="fas fa-user-injured"></i> Mary Johnson
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session
+            localStorage.removeItem('user');
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    });
+        // Basic functionality for the interface
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle sidebar on mobile
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+
+            // Add reminder form submission
+            const newReminderForm = document.getElementById('newReminderForm');
+            if (newReminderForm) {
+                newReminderForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('Reminder Added', 'New medication reminder has been scheduled successfully.', 'success');
+                    this.reset();
+                });
+            }
+
+            // Checkbox functionality
+            const checkboxes = document.querySelectorAll('.reminder-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const title = this.closest('.reminder-item').querySelector('.reminder-title span');
+                    if (this.checked) {
+                        title.classList.add('completed');
+                        showNotification('Reminder Completed', 'Medication reminder marked as completed.', 'success');
+                    } else {
+                        title.classList.remove('completed');
+                    }
+                });
+            });
+
+            // Add reminder button
+            const addReminderBtn = document.getElementById('addReminderBtn');
+            if (addReminderBtn) {
+                addReminderBtn.addEventListener('click', function() {
+                    document.getElementById('newReminderForm').scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                });
+            }
+
+            // Action buttons
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.title;
+                    if (action === 'Delete') {
+                        if (confirm('Are you sure you want to delete this reminder?')) {
+                            this.closest('.reminder-item').style.opacity = '0';
+                            setTimeout(() => {
+                                this.closest('.reminder-item').remove();
+                                showNotification('Reminder Deleted', 'The reminder has been successfully removed.', 'success');
+                            }, 300);
+                        }
+                    } else if (action === 'Snooze') {
+                        showNotification('Reminder Snoozed', 'This reminder will alert you again in 30 minutes.', 'warning');
+                    } else if (action === 'Edit') {
+                        showNotification('Edit Mode', 'You can now edit this reminder.', 'info');
+                    }
+                });
+            });
+
+            // Notification function
+            function showNotification(title, message, type) {
+                const notificationPanel = document.getElementById('notificationPanel');
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <div class="notification-content">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-desc">${message}</div>
+                    </div>
+                    <button class="notification-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                notificationPanel.appendChild(notification);
+                
+                // Close button event
+                notification.querySelector('.notification-close').addEventListener('click', function() {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                });
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.opacity = '0';
+                        setTimeout(() => {
+                            notification.remove();
+                        }, 300);
+                    }
+                }, 5000);
+            }
+
+            // Demo notifications on page load
+            setTimeout(() => {
+                showNotification('Welcome Back, Dr. Smith', 'You have 3 upcoming medication reminders today.', 'info');
+            }, 1000);
+        });
+        fetch('navigation.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('nav-placeholder').innerHTML = data;
+        });
+    </script>
+    <!-- Load navigation -->
+    <script>
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                // Initialize main content margin
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '250px';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.transition = 'margin-left 0.3s ease';
+                }
+                
+                // Add click event for menu toggle
+                const menuToggle = document.getElementById('menuToggle');
+                const sidebar = document.querySelector('.sidebar');
+                if (menuToggle && sidebar) {
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                        }
+                    });
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+</body>
+</html>

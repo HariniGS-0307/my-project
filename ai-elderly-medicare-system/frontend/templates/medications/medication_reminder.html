@@ -1,0 +1,205 @@
+{% extends "base/base.html" %}
+
+{% block title %}Medication Reminders - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Medication Reminders</h4>
+                        <a href="{{ url_for('medications.schedule') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-clock"></i> View Schedule
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Search reminders..." id="searchReminders">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-end">
+                                <div class="me-2">
+                                    <select class="form-select" id="filterStatus">
+                                        <option selected>All Statuses</option>
+                                        <option>Active</option>
+                                        <option>Inactive</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="form-select" id="filterPatient">
+                                        <option selected>All Patients</option>
+                                        <option>John Doe</option>
+                                        <option>Mary Smith</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Medication</th>
+                                    <th>Patient</th>
+                                    <th>Reminder Time</th>
+                                    <th>Frequency</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Lisinopril</td>
+                                    <td>John Doe</td>
+                                    <td>08:00 AM</td>
+                                    <td>Daily</td>
+                                    <td>
+                                        <span class="badge bg-primary">App Notification</span>
+                                        <span class="badge bg-success">SMS</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Disable">
+                                                <i class="fas fa-power-off"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Metformin</td>
+                                    <td>John Doe</td>
+                                    <td>12:00 PM</td>
+                                    <td>Twice Daily</td>
+                                    <td>
+                                        <span class="badge bg-primary">App Notification</span>
+                                        <span class="badge bg-success">SMS</span>
+                                        <span class="badge bg-warning">Email</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Disable">
+                                                <i class="fas fa-power-off"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Atorvastatin</td>
+                                    <td>Mary Smith</td>
+                                    <td>08:00 PM</td>
+                                    <td>Daily</td>
+                                    <td>
+                                        <span class="badge bg-primary">App Notification</span>
+                                    </td>
+                                    <td><span class="badge bg-warning">Inactive</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-success" title="Enable">
+                                                <i class="fas fa-power-off"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Create New Reminder</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="medication" class="form-label">Medication</label>
+                                                    <select class="form-select" id="medication">
+                                                        <option selected>Select medication</option>
+                                                        <option>Lisinopril</option>
+                                                        <option>Metformin</option>
+                                                        <option>Atorvastatin</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="patient" class="form-label">Patient</label>
+                                                    <select class="form-select" id="patient">
+                                                        <option selected>Select patient</option>
+                                                        <option>John Doe</option>
+                                                        <option>Mary Smith</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="reminderTime" class="form-label">Reminder Time</label>
+                                                    <input type="time" class="form-control" id="reminderTime">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="frequency" class="form-label">Frequency</label>
+                                                    <select class="form-select" id="frequency">
+                                                        <option>Daily</option>
+                                                        <option>Twice Daily</option>
+                                                        <option>Weekly</option>
+                                                        <option>As Needed</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="method" class="form-label">Reminder Method</label>
+                                                    <select multiple class="form-select" id="method">
+                                                        <option selected>App Notification</option>
+                                                        <option>SMS</option>
+                                                        <option>Email</option>
+                                                        <option>Phone Call</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-bell"></i> Create Reminder
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

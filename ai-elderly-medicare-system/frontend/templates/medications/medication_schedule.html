@@ -1,0 +1,219 @@
+{% extends "base/base.html" %}
+
+{% block title %}Medication Schedule - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Medication Schedule</h4>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('medications.list_medications') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-pills"></i> All Medications
+                            </a>
+                            <a href="{{ url_for('medications.adherence_report') }}" class="btn btn-outline-info">
+                                <i class="fas fa-chart-bar"></i> Adherence Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                <input type="date" class="form-control" id="scheduleDate" value="{{ today }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-end">
+                                <div class="me-2">
+                                    <select class="form-select" id="filterPatient">
+                                        <option selected>All Patients</option>
+                                        <option>John Doe</option>
+                                        <option>Mary Smith</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="form-select" id="viewMode">
+                                        <option selected>Daily View</option>
+                                        <option>Weekly View</option>
+                                        <option>Monthly View</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Medication</th>
+                                    <th>Patient</th>
+                                    <th>Dosage</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>08:00 AM</td>
+                                    <td>
+                                        <div>
+                                            <strong>Lisinopril</strong>
+                                            <br><small class="text-muted">Prescribed by Dr. Smith</small>
+                                        </div>
+                                    </td>
+                                    <td>John Doe</td>
+                                    <td>10mg</td>
+                                    <td>
+                                        <span class="badge bg-success">Taken</span>
+                                        <br><small class="text-muted">08:15 AM</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-success" title="Mark as Taken">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" title="Missed Dose">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-info" title="Remind">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>12:00 PM</td>
+                                    <td>
+                                        <div>
+                                            <strong>Metformin</strong>
+                                            <br><small class="text-muted">Prescribed by Dr. Smith</small>
+                                        </div>
+                                    </td>
+                                    <td>John Doe</td>
+                                    <td>500mg</td>
+                                    <td>
+                                        <span class="badge bg-warning">Pending</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-success" title="Mark as Taken">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" title="Missed Dose">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-info" title="Remind">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>06:00 PM</td>
+                                    <td>
+                                        <div>
+                                            <strong>Atorvastatin</strong>
+                                            <br><small class="text-muted">Prescribed by Dr. Johnson</small>
+                                        </div>
+                                    </td>
+                                    <td>Mary Smith</td>
+                                    <td>20mg</td>
+                                    <td>
+                                        <span class="badge bg-danger">Missed</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-success" title="Mark as Taken">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" title="Missed Dose">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-info" title="Remind">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Today's Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 text-center">
+                                            <h3 class="text-success">2</h3>
+                                            <p>Taken</p>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <h3 class="text-warning">1</h3>
+                                            <p>Pending</p>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <h3 class="text-danger">1</h3>
+                                            <p>Missed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Weekly Adherence</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="adherenceChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('adherenceChart').getContext('2d');
+    const adherenceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Adherence Rate (%)',
+                data: [85, 90, 75, 100, 95, 80, 70],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

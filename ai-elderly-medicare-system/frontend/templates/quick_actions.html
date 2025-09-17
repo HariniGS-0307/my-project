@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Quick Actions</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <a href="{{ url_for('appointments.book_appointment') }}" class="btn btn-primary w-100">
+                    <i class="fas fa-calendar-plus"></i> Book Appointment
+                </a>
+            </div>
+            <div class="col-md-6 mb-3">
+                <a href="{{ url_for('medications.order_medications') }}" class="btn btn-info w-100">
+                    <i class="fas fa-truck-medical"></i> Order Medications
+                </a>
+            </div>
+            <div class="col-md-6 mb-3">
+                <a href="{{ url_for('health_records.add_record') }}" class="btn btn-success w-100">
+                    <i class="fas fa-file-medical"></i> Add Health Record
+                </a>
+            </div>
+            <div class="col-md-6 mb-3">
+                <a href="{{ url_for('notifications.send_notification') }}" class="btn btn-warning w-100">
+                    <i class="fas fa-bell"></i> Send Notification
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,354 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Dashboard - MediCare{% endblock %}
+
+{% block styles %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        /* Additional inline styles specific to this page can go here */
+
+        /* Gradient background for the dashboard */
+        .dashboard-bg {
+            background: linear-gradient(135deg, #8A2BE2, #4B0082, #FF6B8B, #FFA500, #9370DB);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: calc(100vh - var(--nav-height));
+            padding: 2rem 0;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .dashboard-container {
+            padding: 2rem 0;
+        }
+        
+        .page-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .page-title i {
+            margin-right: 0.75rem;
+            font-size: 1.75rem;
+            color: var(--accent);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: white;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-bg">
+    <div class="dashboard-container">
+        <div class="container-fluid">
+            <h1 class="page-title">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard Overview
+            </h1>
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card stats-card">
+                    <i class="fas fa-user-injured fa-2x" style="color: var(--primary-light);"></i>
+                    <div class="stat-number">1,254</div>
+                    <div class="stat-label">Total Patients</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card stats-card">
+                    <i class="fas fa-calendar-check fa-2x" style="color: var(--success);"></i>
+                    <div class="stat-number">48</div>
+                    <div class="stat-label">Appointments Today</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card stats-card">
+                    <i class="fas fa-pills fa-2x" style="color: var(--warning);"></i>
+                    <div class="stat-number">124</div>
+                    <div class="stat-label">Medications</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card stats-card">
+                    <i class="fas fa-bell fa-2x" style="color: var(--danger);"></i>
+                    <div class="stat-number">18</div>
+                    <div class="stat-label">Reminders</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <h5 class="card-title">Patient Statistics</h5>
+                    <div class="chart-container">
+                        <canvas id="patientChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <h5 class="card-title">Appointment Types</h5>
+                    <div class="chart-container">
+                        <canvas id="appointmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <h5 class="card-title">Recent Activity</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10:30 AM</td>
+                                    <td>New Appointment</td>
+                                    <td>John Doe - General Checkup</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>09:15 AM</td>
+                                    <td>Prescription</td>
+                                    <td>Amoxicillin 500mg for Sarah Smith</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Yesterday</td>
+                                    <td>Lab Results</td>
+                                    <td>Blood Test Results - Robert Johnson</td>
+                                    <td><span class="badge bg-info">Reviewed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize charts when DOM is fully loaded
+        initCharts();
+    });
+
+    function initCharts() {
+        // Patient Statistics Chart
+        const patientCtx = document.getElementById('patientChart');
+        if (patientCtx) {
+            new Chart(patientCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'New Patients',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        borderColor: '#8A2BE2',
+                        backgroundColor: 'rgba(138, 43, 226, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: getChartOptions()
+            });
+        }
+        
+        // Appointments Chart
+        const appointmentsCtx = document.getElementById('appointmentsChart');
+        if (appointmentsCtx) {
+            new Chart(appointmentsCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Scheduled', 'Completed', 'Cancelled', 'Rescheduled'],
+                    datasets: [{
+                        data: [12, 8, 3, 2],
+                        backgroundColor: [
+                            '#8A2BE2',
+                            '#00C9A7',
+                            '#FF6B8B',
+                            '#FFA500'
+                        ],
+                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white',
+                                padding: 20
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+    }
+
+    function getChartOptions() {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 12
+                        },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    usePointStyle: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 12
+                        },
+                        callback: function(value) {
+                            return value;
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 4,
+                    hoverRadius: 6,
+                    backgroundColor: 'white',
+                    borderWidth: 2,
+                    hoverBorderWidth: 3
+                },
+                line: {
+                    borderWidth: 2
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
+        };
+    }
+    </script>
+{% endblock %}

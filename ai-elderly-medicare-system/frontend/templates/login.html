@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare AI - Hospital Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+        }
+
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            top: -250px;
+            left: -100px;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            bottom: -200px;
+            right: -100px;
+        }
+
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            top: 50%;
+            left: 10%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 30px;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+            z-index: 0;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            20% {
+                left: 100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 43px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .divider span {
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider p {
+            margin: 0 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .notification {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #6a11cb;
+        }
+
+        .code-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .code-inputs input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .resend {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .resend a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+        }
+
+        .resend a:hover {
+            text-decoration: underline;
+        }
+
+        .success-animation {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .success-animation i {
+            font-size: 60px;
+            color: #4ade80;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .password-rules {
+            font-size: 13px;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .password-rules ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .password-rules li {
+            margin-bottom: 3px;
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 24px;
+            }
+            
+            .input-group input {
+                padding: 12px 12px 12px 40px;
+            }
+            
+            .input-group i {
+                top: 40px;
+            }
+            
+            .code-inputs input {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+            <!-- Navigation will be loaded here -->
+            
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Login Page -->
+        <div class="page active" id="login-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>MedSupply AI</h1>
+                        <p>Hospital Management System</p>
+                    </div>
+                    
+                    <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+                        <div class="input-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Sign In
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="links">
+                        <a href="#" onclick="showPage('register')">Create Account</a>
+                        <a href="#" onclick="showPage('forgot-password')">Forgot Password?</a>
+                    </div>
+                    
+                    <div class="divider">
+                        <span></span>
+                        <p>Or continue with</p>
+                        <span></span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div class="page" id="register-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>Create Account</h1>
+                        <p>Join MedSupply AI today</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" placeholder="Enter your full name">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" placeholder="Enter your email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" placeholder="Create a password">
+                        <i class="fas fa-lock"></i>
+                        <div class="password-rules">
+                            <p>Password must include:</p>
+                            <ul>
+                                <li>At least 8 characters</li>
+                                <li>One uppercase letter</li>
+                                <li>One number</li>
+                                <li>One special character</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="register-confirm">Confirm Password</label>
+                        <input type="password" id="register-confirm" placeholder="Confirm your password">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    
+                    <button class="btn" onclick="showPage('verify-email')">Create Account</button>
+                    
+                    <div class="links">
+                        <a href="#" onclick="showPage('login')">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forgot Password Page -->
+        <div class="page" id="forgot-password-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>Reset Password</h1>
+                        <p>Enter your email to receive reset instructions</p>
+                    </div>
+                    
+                    <div class="notification">
+                        <p><i class="fas fa-info-circle"></i> Enter your email address and we'll send you a link to reset your password.</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="forgot-email">Email Address</label>
+                        <input type="email" id="forgot-email" placeholder="Enter your email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    
+                    <button class="btn" onclick="showPage('reset-password')">Send Reset Link</button>
+                    
+                    <div class="links">
+                        <a href="#" onclick="showPage('login')">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Password Page -->
+        <div class="page" id="reset-password-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>Create New Password</h1>
+                        <p>Please enter your new password</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="reset-password">New Password</label>
+                        <input type="password" id="reset-password" placeholder="Enter new password">
+                        <i class="fas fa-lock"></i>
+                        <div class="password-rules">
+                            <p>Password must include:</p>
+                            <ul>
+                                <li>At least 8 characters</li>
+                                <li>One uppercase letter</li>
+                                <li>One number</li>
+                                <li>One special character</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="reset-confirm">Confirm New Password</label>
+                        <input type="password" id="reset-confirm" placeholder="Confirm new password">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    
+                    <button class="btn" onclick="showPage('login')">Reset Password</button>
+                    
+                    <div class="links">
+                        <a href="#" onclick="showPage('login')">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Factor Authentication Page -->
+        <div class="page" id="two-factor-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>Two-Step Verification</h1>
+                        <p>Enter the code sent to your email</p>
+                    </div>
+                    
+                    <div class="notification">
+                        <p><i class="fas fa-shield-alt"></i> For added security, please verify your identity with the code sent to your email.</p>
+                    </div>
+                    
+                    <div class="code-inputs">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                    </div>
+                    
+                    <button class="btn" onclick="showPage('dashboard')">Verify & Continue</button>
+                    
+                    <div class="resend">
+                        <p>Didn't receive the code? <a href="#">Resend code</a></p>
+                    </div>
+                    
+                    <div class="links">
+                        <a href="#" onclick="showPage('login')">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Email Page -->
+        <div class="page" id="verify-email-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>Verify Your Email</h1>
+                        <p>We've sent a code to your email</p>
+                    </div>
+                    
+                    <div class="success-animation">
+                        <i class="fas fa-envelope-circle-check"></i>
+                    </div>
+                    
+                    <div class="notification">
+                        <p><i class="fas fa-envelope"></i> We've sent a 6-digit confirmation code to <strong>user@example.com</strong>. Please check your inbox and enter the code below.</p>
+                    </div>
+                    
+                    <div class="code-inputs">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                        <input type="text" maxlength="1" pattern="[0-9]">
+                    </div>
+                    
+                    <button class="btn" onclick="showPage('dashboard')">Verify Email</button>
+                    
+                    <div class="resend">
+                        <p>Didn't receive the email? <a href="#">Resend code</a></p>
+                    </div>
+                    
+                    <div class="links">
+                        <a href="#" onclick="showPage('register')">Back to Registration</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page (Placeholder) -->
+        <div class="page" id="dashboard-page">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="logo">
+                        <h1>Welcome to Dashboard</h1>
+                        <p>MedSupply AI Management System</p>
+                    </div>
+                    
+                    <div class="success-animation">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    
+                    <div class="notification">
+                        <p><i class="fas fa-info-circle"></i> This is a placeholder for the dashboard page. In a real application, this would show patient management, medication tracking, and other features.</p>
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="showPage('login')">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show specific page and hide others
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId + '-page').classList.add('active');
+        }
+        function handleLogin(event) {
+        event.preventDefault();
+        
+        // Get form data
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Here you would typically make an API call to your backend
+        // For this example, we'll simulate a successful login
+        console.log('Login attempt with:', { email, password });
+        
+        // Show loading state
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+        
+        // Simulate API call with timeout
+        setTimeout(() => {
+            // On successful login, redirect to dashboard
+            window.location.href = 'dashboard.html';
+            
+            // Reset button state in case of error
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            
+            // In a real app, you would handle the API response:
+            // fetch('/api/login', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ email, password })
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     if (data.success) {
+            //         // Store user data if needed
+            //         localStorage.setItem('user', JSON.stringify(data.user));
+            //         // Redirect to dashboard
+            //         window.location.href = 'dashboard.html';
+            //     } else {
+            //         alert('Login failed: ' + (data.message || 'Invalid credentials'));
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Login error:', error);
+            //     alert('An error occurred during login');
+            // })
+            // .finally(() => {
+            //     submitBtn.disabled = false;
+            //     submitBtn.innerHTML = originalBtnText;
+            // });
+        }, 1500);
+    }
+        
+
+        // Auto-advance code inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeInputs = document.querySelectorAll('.code-inputs input');
+            
+            codeInputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    if (input.value.length === 1 && index < codeInputs.length - 1) {
+                        codeInputs[index + 1].focus();
+                    }
+                });
+                
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                        codeInputs[index - 1].focus();
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- Load navigation -->
+    <script>
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                // Initialize main content margin
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '250px';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.transition = 'margin-left 0.3s ease';
+                }
+                
+                // Add click event for menu toggle
+                const menuToggle = document.getElementById('menuToggle');
+                const sidebar = document.querySelector('.sidebar');
+                if (menuToggle && sidebar) {
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                        }
+                    });
+                }
+            });
+    </script>
+</body>
+</html>

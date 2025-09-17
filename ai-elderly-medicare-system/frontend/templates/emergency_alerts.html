@@ -1,0 +1,259 @@
+{% extends "base/base.html" %}
+
+{% block title %}Emergency Alerts - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Emergency Alerts</h4>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('notifications.center') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-bell"></i> Notification Center
+                            </a>
+                            <a href="{{ url_for('notifications.settings') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-cog"></i> Alert Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Search alerts..." id="searchAlerts">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-end">
+                                <div class="me-2">
+                                    <select class="form-select" id="filterPatient">
+                                        <option selected>All Patients</option>
+                                        <option>John Doe</option>
+                                        <option>Mary Smith</option>
+                                    </select>
+                                </div>
+                                <div class="me-2">
+                                    <select class="form-select" id="filterStatus">
+                                        <option selected>All Statuses</option>
+                                        <option>Active</option>
+                                        <option>Resolved</option>
+                                        <option>False Alarm</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="form-select" id="filterDate">
+                                        <option selected>Last 24 Hours</option>
+                                        <option>Last 7 Days</option>
+                                        <option>Last 30 Days</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Patient</th>
+                                    <th>Alert Type</th>
+                                    <th>Severity</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-danger">
+                                    <td>Today<br>08:45 AM</td>
+                                    <td>Mary Smith</td>
+                                    <td>
+                                        <div>
+                                            <strong>Heart Rate Anomaly</strong>
+                                            <br><small class="text-muted">Vital Signs Monitoring</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-danger">Critical</span></td>
+                                    <td>Heart rate detected at 145 bpm, significantly above normal range.</td>
+                                    <td><span class="badge bg-danger">Active</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-success" title="Resolve">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" title="False Alarm">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="table-warning">
+                                    <td>Today<br>07:30 AM</td>
+                                    <td>John Doe</td>
+                                    <td>
+                                        <div>
+                                            <strong>Medication Missed</strong>
+                                            <br><small class="text-muted">Medication Tracking</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-warning">High</span></td>
+                                    <td>Missed scheduled dose of Lisinopril (10mg).</td>
+                                    <td><span class="badge bg-warning">Active</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-success" title="Resolve">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" title="False Alarm">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="table-warning">
+                                    <td>Yesterday<br>06:15 PM</td>
+                                    <td>Robert Johnson</td>
+                                    <td>
+                                        <div>
+                                            <strong>Fall Detected</strong>
+                                            <br><small class="text-muted">Wearable Device</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-warning">High</span></td>
+                                    <td>Potential fall detected by wearable device.</td>
+                                    <td><span class="badge bg-success">Resolved</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" title="Reopen">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jun 12, 2023<br>11:20 AM</td>
+                                    <td>Mary Smith</td>
+                                    <td>
+                                        <div>
+                                            <strong>Blood Pressure Spike</strong>
+                                            <br><small class="text-muted">Vital Signs Monitoring</small>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-warning">Medium</span></td>
+                                    <td>Blood pressure reading of 160/95 mmHg.</td>
+                                    <td><span class="badge bg-success">Resolved</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" title="Reopen">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h5>2 Active Critical Alerts</h5>
+                                            <p class="mb-0">Require immediate attention</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-warning text-dark">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-exclamation-circle fa-2x"></i>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h5>1 Active High Alert</h5>
+                                            <p class="mb-0">Requires prompt attention</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-chart-bar fa-2x"></i>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h5>85% Resolution Rate</h5>
+                                            <p class="mb-0">This month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Alert Response Guidelines</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Critical Alerts (Red)</h6>
+                                            <ul>
+                                                <li>Respond within 5 minutes</li>
+                                                <li>Contact emergency services if needed</li>
+                                                <li>Notify family members/caregivers</li>
+                                                <li>Document response actions</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>High Alerts (Yellow)</h6>
+                                            <ul>
+                                                <li>Respond within 30 minutes</li>
+                                                <li>Contact patient to assess situation</li>
+                                                <li>Notify healthcare provider if needed</li>
+                                                <li>Document response actions</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

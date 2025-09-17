@@ -1,0 +1,168 @@
+{% extends "base/base.html" %}
+
+{% block title %}Book Appointment - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Book New Appointment</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Appointment Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{ url_for('appointments.save_appointment') }}">
+                                        {{ form.hidden_tag() }}
+                                        
+                                        <div class="mb-3">
+                                            <label for="patient" class="form-label">Select Patient</label>
+                                            <select class="form-select" id="patient" name="patient">
+                                                <option selected>Select patient</option>
+                                                <option>John Doe</option>
+                                                <option>Mary Smith</option>
+                                                <option>Robert Johnson</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="doctor" class="form-label">Select Doctor</label>
+                                            <select class="form-select" id="doctor" name="doctor">
+                                                <option selected>Select doctor</option>
+                                                <option>Dr. Smith - Cardiology</option>
+                                                <option>Dr. Johnson - General Practice</option>
+                                                <option>Dr. Williams - Neurology</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="appointmentDate" class="form-label">Date</label>
+                                                    <input type="date" class="form-control" id="appointmentDate" name="appointmentDate">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="appointmentTime" class="form-label">Time</label>
+                                                    <input type="time" class="form-control" id="appointmentTime" name="appointmentTime">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="appointmentType" class="form-label">Appointment Type</label>
+                                            <select class="form-select" id="appointmentType" name="appointmentType">
+                                                <option selected>Select appointment type</option>
+                                                <option>Regular Checkup</option>
+                                                <option>Follow-up</option>
+                                                <option>Consultation</option>
+                                                <option>Emergency</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="reason" class="form-label">Reason for Appointment</label>
+                                            <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="Briefly describe the reason for this appointment..."></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="notes" class="form-label">Additional Notes</label>
+                                            <textarea class="form-control" id="notes" name="notes" rows="2" placeholder="Any additional information..."></textarea>
+                                        </div>
+                                        
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-calendar-check"></i> Book Appointment
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Doctor Availability</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="selectDoctor" class="form-label">Select Doctor to View Availability</label>
+                                        <select class="form-select" id="selectDoctor">
+                                            <option selected>Select doctor</option>
+                                            <option>Dr. Smith - Cardiology</option>
+                                            <option>Dr. Johnson - General Practice</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>Mon</th>
+                                                    <th>Tue</th>
+                                                    <th>Wed</th>
+                                                    <th>Thu</th>
+                                                    <th>Fri</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>09:00</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-danger text-white text-center">Busy</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10:00</td>
+                                                    <td class="bg-danger text-white text-center">Busy</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-danger text-white text-center">Busy</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>11:00</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                    <td class="bg-danger text-white text-center">Busy</td>
+                                                    <td class="bg-success text-white text-center">Available</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5>Appointment Guidelines</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li>Appointments must be booked at least 24 hours in advance</li>
+                                        <li>Please arrive 15 minutes early for your appointment</li>
+                                        <li>Bring your ID and insurance card</li>
+                                        <li>Cancel or reschedule at least 2 hours before appointment time</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

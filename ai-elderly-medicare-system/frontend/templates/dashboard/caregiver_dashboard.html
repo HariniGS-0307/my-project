@@ -1,0 +1,141 @@
+{% extends "base/base.html" %}
+
+{% block title %}Caregiver Dashboard - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Caregiver Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Caregiver Overview</h2>
+                            <p class="text-muted">Manage patient care and monitor health status.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    {% include 'dashboard/widgets/stats_cards.html' %}
+                    
+                    <div class="row mt-4">
+                        <!-- Patient List -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">My Patients</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Patient Name</th>
+                                                    <th>Age</th>
+                                                    <th>Condition</th>
+                                                    <th>Last Checkup</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>John Doe</td>
+                                                    <td>78</td>
+                                                    <td>Diabetes, Hypertension</td>
+                                                    <td>June 10, 2023</td>
+                                                    <td><span class="badge bg-success">Stable</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mary Smith</td>
+                                                    <td>82</td>
+                                                    <td>Arthritis, Heart Disease</td>
+                                                    <td>June 12, 2023</td>
+                                                    <td><span class="badge bg-warning">Needs Attention</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="col-md-4">
+                            {% include 'dashboard/widgets/quick_actions.html' %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <!-- Recent Notifications -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Recent Notifications</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                                                    <strong>Medication Missed</strong>
+                                                    <p class="mb-0 text-muted">John Doe missed Lisinopril dose</p>
+                                                </div>
+                                                <small class="text-muted">2 hours ago</small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <i class="fas fa-heartbeat text-success"></i>
+                                                    <strong>Vital Signs Normal</strong>
+                                                    <p class="mb-0 text-muted">Mary Smith's vitals are stable</p>
+                                                </div>
+                                                <small class="text-muted">5 hours ago</small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Upcoming Tasks -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Upcoming Tasks</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong>Medication Administration</strong>
+                                                    <p class="mb-0 text-muted">John Doe - Lisinopril 10mg</p>
+                                                </div>
+                                                <small class="text-muted">Today, 8:00 AM</small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong>Doctor Appointment</strong>
+                                                    <p class="mb-0 text-muted">Mary Smith - Cardiology</p>
+                                                </div>
+                                                <small class="text-muted">Tomorrow, 10:30 AM</small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

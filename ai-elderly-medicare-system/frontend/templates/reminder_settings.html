@@ -1,0 +1,222 @@
+{% extends "base/base.html" %}
+
+{% block title %}Reminder Settings - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Reminder Settings</h4>
+                        <a href="{{ url_for('notifications.settings') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-cog"></i> General Settings
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Reminder Types</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <button type="button" class="list-group-item list-group-item-action active">
+                                            <i class="fas fa-pills"></i> Medication Reminders
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-calendar-check"></i> Appointment Reminders
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-weight"></i> Health Check Reminders
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-utensils"></i> Meal Reminders
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-walking"></i> Activity Reminders
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Medication Reminder Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="mb-4">
+                                            <h6>Default Reminder Times</h6>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="morningReminder" class="form-label">Morning Reminder</label>
+                                                    <input type="time" class="form-control" id="morningReminder" value="08:00">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="afternoonReminder" class="form-label">Afternoon Reminder</label>
+                                                    <input type="time" class="form-control" id="afternoonReminder" value="12:00">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="eveningReminder" class="form-label">Evening Reminder</label>
+                                                    <input type="time" class="form-control" id="eveningReminder" value="18:00">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <h6>Reminder Repetition</h6>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="repeatReminder" checked>
+                                                <label class="form-check-label" for="repeatReminder">
+                                                    Repeat reminder every 15 minutes until acknowledged
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="autoSnooze" checked>
+                                                <label class="form-check-label" for="autoSnooze">
+                                                    Auto-snooze if not acknowledged within 30 minutes
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <h6>Reminder Methods</h6>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="methodInApp" checked>
+                                                <label class="form-check-label" for="methodInApp">
+                                                    In-App Notification
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="methodSMS" checked>
+                                                <label class="form-check-label" for="methodSMS">
+                                                    SMS Message
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="methodEmail" checked>
+                                                <label class="form-check-label" for="methodEmail">
+                                                    Email Notification
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="methodPush" checked>
+                                                <label class="form-check-label" for="methodPush">
+                                                    Push Notification
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="methodPhone">
+                                                <label class="form-check-label" for="methodPhone">
+                                                    Phone Call
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <h6>Special Instructions</h6>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="withFood" checked>
+                                                <label class="form-check-label" for="withFood">
+                                                    Include "Take with food" instruction when applicable
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="withWater">
+                                                <label class="form-check-label" for="withWater">
+                                                    Include "Take with water" instruction when applicable
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save"></i> Save Reminder Settings
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5>Custom Reminders</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Reminder</th>
+                                                    <th>Time</th>
+                                                    <th>Days</th>
+                                                    <th>Active</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Blood Pressure Check</td>
+                                                    <td>08:30 AM</td>
+                                                    <td>Mon, Wed, Fri</td>
+                                                    <td>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Walk/Exercise</td>
+                                                    <td>05:00 PM</td>
+                                                    <td>Daily</td>
+                                                    <td>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="d-grid mt-3">
+                                        <button type="button" class="btn btn-outline-primary">
+                                            <i class="fas fa-plus"></i> Add Custom Reminder
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

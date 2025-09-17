@@ -1,0 +1,165 @@
+{% extends "base/base.html" %}
+
+{% block title %}Medical History - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Medical History for {{ patient.first_name }} {{ patient.last_name }}</h4>
+                        <a href="{{ url_for('health_records.add_record', patient_id=patient.id) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-plus"></i> Add Record
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs" id="historyTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="vital-signs-tab" data-bs-toggle="tab" data-bs-target="#vital-signs" type="button" role="tab">
+                                        <i class="fas fa-heartbeat"></i> Vital Signs
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="diagnoses-tab" data-bs-toggle="tab" data-bs-target="#diagnoses" type="button" role="tab">
+                                        <i class="fas fa-diagnoses"></i> Diagnoses
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="procedures-tab" data-bs-toggle="tab" data-bs-target="#procedures" type="button" role="tab">
+                                        <i class="fas fa-procedures"></i> Procedures
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="allergies-tab" data-bs-toggle="tab" data-bs-target="#allergies" type="button" role="tab">
+                                        <i class="fas fa-allergies"></i> Allergies
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="historyTabsContent">
+                                <div class="tab-pane fade show active" id="vital-signs" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Blood Pressure</th>
+                                                    <th>Heart Rate</th>
+                                                    <th>Temperature</th>
+                                                    <th>Weight</th>
+                                                    <th>Height</th>
+                                                    <th>BMI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>June 15, 2023</td>
+                                                    <td>120/80 mmHg</td>
+                                                    <td>72 bpm</td>
+                                                    <td>98.6°F</td>
+                                                    <td>70 kg</td>
+                                                    <td>170 cm</td>
+                                                    <td>24.2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>May 15, 2023</td>
+                                                    <td>122/82 mmHg</td>
+                                                    <td>75 bpm</td>
+                                                    <td>98.4°F</td>
+                                                    <td>71 kg</td>
+                                                    <td>170 cm</td>
+                                                    <td>24.5</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="diagnoses" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Diagnosis</th>
+                                                    <th>Diagnosing Physician</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>June 15, 2023</td>
+                                                    <td>Hypertension</td>
+                                                    <td>Dr. Smith</td>
+                                                    <td><span class="badge bg-success">Managed</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>June 15, 2023</td>
+                                                    <td>Type 2 Diabetes</td>
+                                                    <td>Dr. Smith</td>
+                                                    <td><span class="badge bg-success">Controlled</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="procedures" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Procedure</th>
+                                                    <th>Performing Physician</th>
+                                                    <th>Notes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>April 10, 2023</td>
+                                                    <td>Annual Physical Exam</td>
+                                                    <td>Dr. Johnson</td>
+                                                    <td>Normal results</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="allergies" role="tabpanel">
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Allergen</th>
+                                                    <th>Reaction</th>
+                                                    <th>Severity</th>
+                                                    <th>Date Reported</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Penicillin</td>
+                                                    <td>Skin rash</td>
+                                                    <td>Moderate</td>
+                                                    <td>January 5, 2020</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

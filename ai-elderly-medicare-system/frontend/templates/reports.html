@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare AI - Advanced Reports Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --primary-dark: #4B0082;
+            --primary-light: #9370DB;
+            --secondary: #FF6B8B;
+            --accent: #FFA500;
+            --light: rgba(255, 255, 255, 0.85);
+            --dark: #2F1B4B;
+            --success: #00C9A7;
+            --warning: #FFC75F;
+            --danger: #FF8066;
+            --info: #4FC4F7;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.12);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(135deg, #8A2BE2, #4B0082, #FF6B8B, #FFA500, #9370DB);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 40px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid var(--glass-border);
+            padding: 25px 0;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header h3 {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item i {
+            width: 25px;
+            margin-right: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 30px;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid var(--accent);
+        }
+
+        .menu-item:hover i {
+            transform: translateX(5px);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .page-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title p {
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .header-tools {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            width: 200px;
+            outline: none;
+        }
+
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 2px var(--primary-light);
+            width: 250px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn i {
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-light);
+            color: var(--light);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 25px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light);
+        }
+
+        /* Report Cards */
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 0 25px 25px;
+        }
+
+        .report-card {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            z-index: -1;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .report-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .report-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .report-description {
+            font-size: 0.9rem;
+            color: var(--light);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--light);
+        }
+
+        .report-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Report Preview */
+        .report-preview {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            margin: 0 25px 25px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-content {
+            padding: 20px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 1.1rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--light);
+        }
+
+        .filter-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-select option {
+            background: var(--dark);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            width: 100%;
+            height: 250px;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .report-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c3e50;
+        color: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 20px 0;
+        overflow-y: auto;
+    }
+
+    .logo {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .logo h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-links li {
+        margin: 5px 0;
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .nav-links a.active {
+        background: #3498db;
+        color: white;
+        border-left: 4px solid #fff;
+    }
+
+    .nav-links a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 15px 0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .sidebar {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .logo h2, .nav-links span {
+            display: none;
+        }
+
+        .nav-links a {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .nav-links a i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+    }
+    </style>
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="css/navigation.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+            <!-- Navigation will be loaded here -->
+            <div id="nav-placeholder"></div>
+    <div class="container">
+        <!-- Sidebar -->
+        
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h1>AI-Powered Reports Dashboard</h1>
+                    <p>Advanced analytics and insights powered by MediCare AI</p>
+                </div>
+                <div class="header-tools">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search reports...">
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Generate Report
+                    </button>
+                    <button class="btn btn-outline" id="filterToggle">
+                        <i class="fas fa-filter"></i> Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section" id="filterSection">
+                <div class="filter-group">
+                    <span class="filter-label">Date Range:</span>
+                    <select class="filter-select">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>Last 3 months</option>
+                        <option>Last 6 months</option>
+                        <option>Custom Range</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Report Type:</span>
+                    <select class="filter-select">
+                        <option>All Reports</option>
+                        <option>Patient Reports</option>
+                        <option>Medication Reports</option>
+                        <option>Financial Reports</option>
+                        <option>AI Predictions</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Status:</span>
+                    <select class="filter-select">
+                        <option>All Status</option>
+                        <option>Completed</option>
+                        <option>Pending</option>
+                        <option>Archived</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-sync"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--primary-light);">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <div class="stat-value">248</div>
+                    <div class="stat-label">Total Reports</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--success);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-value">192</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--warning);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">42</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--info);">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="stat-value">86</div>
+                    <div class="stat-label">AI Predictions</div>
+                </div>
+            </div>
+
+            <!-- Report Grid -->
+            <div class="report-grid">
+                <!-- Report Card 1 -->
+                <div class="report-card">
+                    <div class="report-icon" style="color: var(--primary-light);">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <h3 class="report-title">Patient Demographics Analysis</h3>
+                    <p class="report-description">Detailed analysis of patient demographics including age, gender, location distribution, and health trends.</p>
+                    <div class="report-meta">
+                        <span class="report-date">
+                            <i class="far fa-calendar-alt"></i> Last updated: 2 days ago
+                        </span>
+                        <div class="report-actions">
+                            <button class="action-btn"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 2 -->
+                <div class="report-card">
+                    <div class="report-icon" style="color: var(--success);">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3 class="report-title">Health Metrics & Trends</h3>
+                    <p class="report-description">Comprehensive report on patient health metrics including vitals, BMI, chronic conditions and improvement trends.</p>
+                    <div class="report-meta">
+                        <span class="report-date">
+                            <i class="far fa-calendar-alt"></i> Last updated: 1 week ago
+                        </span>
+                        <div class="report-actions">
+                            <button class="action-btn"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 3 -->
+                <div class="report-card">
+                    <div class="report-icon" style="color: var(--info);">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3 class="report-title">Medication Adherence Analysis</h3>
+                    <p class="report-description">Analysis of medication prescriptions, adherence rates, potential interactions and effectiveness monitoring.</p>
+                    <div class="report-meta">
+                        <span class="report-date">
+                            <i class="far fa-calendar-alt"></i> Last updated: 3 days ago
+                        </span>
+                        <div class="report-actions">
+                            <button class="action-btn"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 4 -->
+                <div class="report-card">
+                    <div class="report-icon" style="color: var(--warning);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="report-title">Appointment Analytics</h3>
+                    <p class="report-description">Detailed report on appointment scheduling, no-shows, patient wait times and clinic efficiency metrics.</p>
+                    <div class="report-meta">
+                        <span class="report-date">
+                            <i class="far fa-calendar-alt"></i> Last updated: 1 day ago
+                        </span>
+                        <div class="report-actions">
+                            <button class="action-btn"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 5 -->
+                <div class="report-card">
+                    <div class="report-icon" style="color: var(--danger);">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="report-title">Financial Performance</h3>
+                    <p class="report-description">Comprehensive financial analysis including revenue, expenses, insurance claims and profitability metrics.</p>
+                    <div class="report-meta">
+                        <span class="report-date">
+                            <i class="far fa-calendar-alt"></i> Last updated: 1 month ago
+                        </span>
+                        <div class="report-actions">
+                            <button class="action-btn"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 6 -->
+                <div class="report-card">
+                    <div class="report-icon" style="color: var(--accent);">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="report-title">AI Prediction: Health Trends</h3>
+                    <p class="report-description">AI-powered prediction of community health trends, medication needs and potential outbreak predictions.</p>
+                    <div class="report-meta">
+                        <span class="report-date">
+                            <i class="fas fa-magic"></i> Generated: Today
+                        </span>
+                        <div class="report-actions">
+                            <button class="action-btn"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn"><i class="fas fa-download"></i></button>
+                            <button class="action-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Preview Section -->
+            <div class="report-preview">
+                <div class="preview-header">
+                    <h3 class="preview-title">Report Preview - Patient Demographics Analysis</h3>
+                    <div class="preview-actions">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-print"></i> Print Report
+                        </button>
+                    </div>
+                </div>
+                <div class="preview-content">
+                    <div style="width: 100%;">
+                        <div style="display: flex; gap: 20px; margin-bottom: 25px;">
+                            <div style="flex: 1; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--accent);">Patient Distribution by Age</h4>
+                                <div class="chart-container">
+                                    <canvas id="ageChart"></canvas>
+                                </div>
+                            </div>
+                            <div style="flex: 1; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--accent);">Medication Adherence Rate</h4>
+                                <div class="chart-container">
+                                    <canvas id="adherenceChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px;">
+                            <h4 style="margin-bottom: 15px; color: var(--accent);">Key Insights</h4>
+                            <ul style="list-style-type: none;">
+                                <li style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <i class="fas fa-check-circle" style="color: var(--success); margin-right: 10px;"></i>
+                                    <span>72% of patients over 65 show excellent medication adherence</span>
+                                </li>
+                                <li style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <i class="fas fa-exclamation-triangle" style="color: var(--warning); margin-right: 10px;"></i>
+                                    <span>12% increase in hypertension cases in the last quarter</span>
+                                </li>
+                                <li style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <i class="fas fa-brain" style="color: var(--info); margin-right: 10px;"></i>
+                                    <span>AI predicts 15% higher demand for diabetes medication next month</span>
+                                </li>
+                                <li style="padding: 10px;">
+                                    <i class="fas fa-map-marker-alt" style="color: var(--danger); margin-right: 10px;"></i>
+                                    <span>Highest patient concentration in the northern district (38%)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session
+            localStorage.removeItem('user');
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    });
+        // Global chart instances
+        let charts = {};
+        let currentReportData = null;
+
+        // Add active class to current menu item
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize UI components
+            initMenuItems();
+            initFilterToggle();
+            initReportCards();
+            initSearch();
+            initDateRangePicker();
+            initExportButtons();
+            
+            // Load initial data
+            loadInitialData();
+        });
+
+        function initMenuItems() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        function initFilterToggle() {
+            const filterToggle = document.getElementById('filterToggle');
+            const filterSection = document.getElementById('filterSection');
+            
+            if (filterToggle && filterSection) {
+                filterToggle.addEventListener('click', function() {
+                    filterSection.style.display = filterSection.style.display === 'none' ? 'flex' : 'none';
+                });
+            }
+        }
+
+        function initReportCards() {
+            const reportCards = document.querySelectorAll('.report-card');
+            const previewContent = document.querySelector('.preview-content');
+            const previewTitle = document.querySelector('.preview-title');
+            
+            reportCards.forEach((card, index) => {
+                card.addEventListener('click', function() {
+                    loadReportData(index);
+                    updateActiveCard(this);
+                });
+            });
+
+            // Click first report card by default
+            if (reportCards.length > 0) {
+                reportCards[0].click();
+            }
+        }
+
+        function initSearch() {
+            const searchInput = document.querySelector('.search-bar input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll('.report-card');
+                    
+                    cards.forEach(card => {
+                        const title = card.querySelector('.report-title').textContent.toLowerCase();
+                        const description = card.querySelector('.report-description').textContent.toLowerCase();
+                        
+                        card.style.display = (title.includes(searchTerm) || description.includes(searchTerm)) 
+                            ? 'block' 
+                            : 'none';
+                    });
+                });
+            }
+        }
+
+        function initDateRangePicker() {
+            const dateInputs = {
+                start: document.getElementById('startDate'),
+                end: document.getElementById('endDate')
+            };
+
+            // Set default date range (last 30 days)
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 30);
+
+            if (dateInputs.start && dateInputs.end) {
+                dateInputs.start.valueAsDate = startDate;
+                dateInputs.end.valueAsDate = endDate;
+
+                // Add event listeners for date changes
+                Object.values(dateInputs).forEach(input => {
+                    input.addEventListener('change', applyFilters);
+                });
+            }
+        }
+
+        function initExportButtons() {
+            document.querySelectorAll('.export-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const format = this.dataset.format;
+                    exportReport(format);
+                });
+            });
+        }
+
+        function loadInitialData() {
+            // Simulate API call to get report data
+            setTimeout(() => {
+                // This would be an actual API call in production
+                // fetch('/api/reports/summary')
+                //     .then(response => response.json())
+                //     .then(data => updateDashboardMetrics(data));
+                
+                const mockData = {
+                    totalPatients: 1245,
+                    avgAdherence: 78.5,
+                    criticalAlerts: 12,
+                    pendingTasks: 8
+                };
+                
+                updateDashboardMetrics(mockData);
+            }, 500);
+        }
+
+        function loadReportData(reportIndex) {
+            // Show loading state
+            const previewContent = document.querySelector('.preview-content');
+            previewContent.innerHTML = '<div class="loading">Loading report data...</div>';
+
+            // Simulate API call
+            setTimeout(() => {
+                const reportData = getMockReportData(reportIndex);
+                currentReportData = reportData;
+                renderReportPreview(reportData);
+            }, 800);
+        }
+
+        function getMockReportData(index) {
+            const reportTypes = [
+                {
+                    title: 'Patient Adherence',
+                    description: 'Detailed analysis of patient medication adherence rates and patterns.',
+                    charts: ['adherenceTrend', 'adherenceByMedication'],
+                    insights: [
+                        'Overall adherence rate improved by 12% in the last quarter',
+                        'Cardiovascular medications show the highest adherence at 85%',
+                        'Patients aged 65+ show 15% lower adherence rates compared to younger patients'
+                    ]
+                },
+                {
+                    title: 'Medication Inventory',
+                    description: 'Comprehensive overview of medication stock levels and usage patterns.',
+                    charts: ['inventoryLevels', 'medicationUsage'],
+                    insights: [
+                        '5 medications are below minimum stock levels',
+                        'Antibiotic usage has increased by 22% this month',
+                        'Projected stockout for Metformin in 14 days'
+                    ]
+                },
+                {
+                    title: 'Patient Outcomes',
+                    description: 'Analysis of treatment effectiveness and patient health outcomes.',
+                    charts: ['outcomeTrends', 'treatmentEffectiveness'],
+                    insights: [
+                        '85% of patients showed improvement in target health metrics',
+                        'Readmission rates decreased by 18% compared to last quarter',
+                        'Patient satisfaction scores average 4.7/5.0'
+                    ]
+                }
+            ];
+
+            return reportTypes[index % reportTypes.length];
+        }
+
+        function renderReportPreview(reportData) {
+            const previewContent = document.querySelector('.preview-content');
+            const previewTitle = document.querySelector('.preview-title');
+            
+            previewTitle.textContent = `Report - ${reportData.title}`;
+            
+            let chartsHTML = '';
+            reportData.charts.forEach((chartId, index) => {
+                chartsHTML += `
+                    <div class="chart-container">
+                        <canvas id="${chartId}"></canvas>
+                    </div>
+                `;
+            });
+            
+            const insightsHTML = reportData.insights.map((insight, i) => `
+                <li style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                    <i class="${i % 3 === 0 ? 'fas fa-check-circle' : i % 3 === 1 ? 'fas fa-exclamation-triangle' : 'fas fa-brain'}" 
+                       style="color: ${i % 3 === 0 ? 'var(--success)' : i % 3 === 1 ? 'var(--warning)' : 'var(--info)'}; 
+                              margin-right: 10px;"></i>
+                    <span>${insight}</span>
+                </li>
+            `).join('');
+            
+            previewContent.innerHTML = `
+                <div class="report-header">
+                    <h3>${reportData.title}</h3>
+                    <div class="report-actions">
+                        <button class="btn btn-outline" onclick="exportReport('pdf')">
+                            <i class="far fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn btn-outline" onclick="exportReport('excel')">
+                            <i class="far fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn btn-primary" onclick="scheduleReport()">
+                            <i class="far fa-calendar-plus"></i> Schedule
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    ${chartsHTML}
+                </div>
+                <div class="insights-section">
+                    <h4><i class="fas fa-lightbulb"></i> Key Insights</h4>
+                    <ul>${insightsHTML}</ul>
+                </div>
+                <div class="report-footer">
+                    <span class="report-meta">
+                        <i class="far fa-calendar-alt"></i> 
+                        Generated: ${new Date().toLocaleString()}
+                    </span>
+                    <span class="report-meta">
+                        <i class="fas fa-user-md"></i> 
+                        Prepared by: Dr. ${document.querySelector('.user-info h3')?.textContent || 'System Admin'}
+                    </span>
+                </div>
+            `;
+
+            // Initialize charts
+            initializeCharts(reportData);
+        }
+
+        function initializeCharts(reportData) {
+            // Destroy existing charts
+            Object.values(charts).forEach(chart => chart.destroy());
+            charts = {};
+
+            reportData.charts.forEach(chartId => {
+                const ctx = document.getElementById(chartId)?.getContext('2d');
+                if (!ctx) return;
+
+                const chartConfig = getChartConfig(chartId);
+                if (chartConfig) {
+                    charts[chartId] = new Chart(ctx, chartConfig);
+                }
+            });
+        }
+
+        function getChartConfig(chartId) {
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'rgba(255, 255, 255, 0.7)' }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 12 },
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                    }
+                }
+            };
+
+            const chartConfigs = {
+                adherenceTrend: {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Adherence Rate (%)',
+                            data: [65, 72, 78, 75, 82, 88],
+                            borderColor: 'rgba(138, 43, 226, 0.8)',
+                            backgroundColor: 'rgba(138, 43, 226, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        ...commonOptions,
+                        plugins: {
+                            ...commonOptions.plugins,
+                            title: {
+                                display: true,
+                                text: 'Monthly Adherence Trend',
+                                color: 'rgba(255, 255, 255, 0.9)',
+                                font: { size: 16 }
+                            }
+                        }
+                    }
+                },
+                // Add more chart configurations as needed
+            };
+
+            return chartConfigs[chartId];
+        }
+
+        function updateDashboardMetrics(data) {
+            // Update metric cards with real data
+            document.querySelectorAll('.metric-card').forEach(card => {
+                const metric = card.dataset.metric;
+                const valueElement = card.querySelector('.metric-value');
+                if (valueElement && data[metric] !== undefined) {
+                    valueElement.textContent = data[metric];
+                }
+            });
+        }
+
+        function updateActiveCard(activeCard) {
+            document.querySelectorAll('.report-card').forEach(card => {
+                card.style.opacity = '0.7';
+                card.style.border = '1px solid var(--glass-border)';
+            });
+            
+            if (activeCard) {
+                activeCard.style.opacity = '1';
+                activeCard.style.border = '1px solid var(--accent)';
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function applyFilters() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const status = document.getElementById('statusFilter').value;
+            
+            // Show loading state
+            const previewContent = document.querySelector('.preview-content');
+            previewContent.innerHTML = '<div class="loading">Applying filters...</div>';
+            
+            // Simulate API call with filters
+            setTimeout(() => {
+                if (currentReportData) {
+                    renderReportPreview(currentReportData);
+                }
+            }, 600);
+        }
+
+        function exportReport(format) {
+            // In a real app, this would generate and download the report
+            alert(`Exporting report as ${format.toUpperCase()}...`);
+            console.log(`Exporting report as ${format}`, currentReportData);
+            
+            // Simulate export
+            setTimeout(() => {
+                alert(`Report exported successfully as ${format.toUpperCase()}!`);
+            }, 1000);
+        }
+
+        function scheduleReport() {
+            // In a real app, this would open a scheduling modal
+            alert('Opening report scheduling options...');
+            console.log('Scheduling report:', currentReportData);
+        }
+
+        // Make functions available globally for HTML onclick handlers
+        window.exportReport = exportReport;
+        window.scheduleReport = scheduleReport;
+        fetch('navigation.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('nav-placeholder').innerHTML = data;
+        });
+    </script>
+    <!-- Load navigation -->
+    <script>
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                // Initialize main content margin
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '250px';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.transition = 'margin-left 0.3s ease';
+                }
+                
+                // Add click event for menu toggle
+                const menuToggle = document.getElementById('menuToggle');
+                const sidebar = document.querySelector('.sidebar');
+                if (menuToggle && sidebar) {
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                        }
+                    });
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+</body>
+</html>

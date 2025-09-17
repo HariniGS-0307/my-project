@@ -1,0 +1,364 @@
+/* Notifications CSS for AI Elderly Medicare System */
+
+/* Notification Center */
+.notification-center {
+  padding: 20px 0;
+}
+
+.notification-header {
+  margin-bottom: 30px;
+}
+
+.notification-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 10px;
+}
+
+/* Notification List */
+.notification-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-item {
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item.unread {
+  background-color: #e7f1ff;
+}
+
+.notification-item.unread:hover {
+  background-color: #dbe7ff;
+}
+
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.notification-icon.info {
+  background-color: rgba(13, 202, 240, 0.1);
+  color: #0dcaf0;
+}
+
+.notification-icon.success {
+  background-color: rgba(25, 135, 84, 0.1);
+  color: #198754;
+}
+
+.notification-icon.warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.notification-icon.danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title-text {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.notification-message {
+  color: #495057;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.notification-time {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.notification-action-btn {
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  border-radius: 0.25rem;
+}
+
+/* Notification Settings */
+.settings-section {
+  margin-bottom: 30px;
+}
+
+.settings-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-info {
+  flex: 1;
+}
+
+.setting-label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.setting-description {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.setting-toggle {
+  margin-left: 15px;
+}
+
+/* Emergency Alerts */
+.emergency-alerts-container {
+  padding: 20px 0;
+}
+
+.alert-card {
+  border-left: 4px solid #dc3545;
+  margin-bottom: 20px;
+}
+
+.alert-card-header {
+  background-color: rgba(220, 53, 69, 0.1);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #dc3545;
+}
+
+.alert-card-body {
+  padding: 20px;
+}
+
+.alert-message {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.alert-timestamp {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Reminder Settings */
+.reminder-settings-container {
+  padding: 20px 0;
+}
+
+.reminder-type {
+  margin-bottom: 25px;
+}
+
+.reminder-type-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.reminder-type-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.reminder-options {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 0.375rem;
+}
+
+.reminder-option {
+  margin-bottom: 15px;
+}
+
+.reminder-option:last-child {
+  margin-bottom: 0;
+}
+
+.reminder-option-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.reminder-option-description {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* Notification Badge */
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}
+
+.toast {
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-radius: 0.375rem;
+  margin-bottom: 10px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: #f8f9fa;
+  border-radius: calc(0.375rem - 1px) calc(0.375rem - 1px) 0 0;
+}
+
+.toast-body {
+  padding: 15px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .notification-item {
+    padding: 15px;
+  }
+  
+  .notification-content {
+    min-width: 0;
+  }
+  
+  .notification-title-text {
+    font-size: 1rem;
+  }
+  
+  .notification-message {
+    font-size: 0.9rem;
+  }
+  
+  .notification-actions {
+    flex-direction: column;
+  }
+  
+  .toast-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .notification-center,
+  .emergency-alerts-container,
+  .reminder-settings-container {
+    padding: 15px 0;
+  }
+  
+  .notification-title {
+    font-size: 1.75rem;
+  }
+  
+  .notification-item {
+    flex-direction: column;
+  }
+  
+  .notification-icon {
+    margin-bottom: 15px;
+  }
+  
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .setting-toggle {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+}

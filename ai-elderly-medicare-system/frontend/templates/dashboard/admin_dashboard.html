@@ -1,0 +1,132 @@
+{% extends "base/base.html" %}
+
+{% block title %}Admin Dashboard - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Admin Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>System Administration</h2>
+                            <p class="text-muted">Manage users, system settings, and monitor overall system health.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    {% include 'dashboard/widgets/stats_cards.html' %}
+                    
+                    <div class="row mt-4">
+                        <!-- System Overview -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">System Overview</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Total Users:</strong> 1,245</p>
+                                            <p><strong>Active Patients:</strong> 876</p>
+                                            <p><strong>Active Caregivers:</strong> 123</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>System Uptime:</strong> 99.98%</p>
+                                            <p><strong>Pending Approvals:</strong> 5</p>
+                                            <p><strong>Support Tickets:</strong> 12</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <a href="{{ url_for('admin.system_logs') }}" class="btn btn-outline-primary">
+                                            <i class="fas fa-cogs"></i> View System Logs
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="col-md-4">
+                            {% include 'dashboard/widgets/quick_actions.html' %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <!-- Recent Activity -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Recent Activity</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <i class="fas fa-user-plus text-success"></i>
+                                                    <strong>New User Registered</strong>
+                                                    <p class="mb-0 text-muted">John Doe (Patient)</p>
+                                                </div>
+                                                <small class="text-muted">10 minutes ago</small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <i class="fas fa-file-medical text-info"></i>
+                                                    <strong>Health Record Updated</strong>
+                                                    <p class="mb-0 text-muted">Patient ID: 12345</p>
+                                                </div>
+                                                <small class="text-muted">1 hour ago</small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- System Alerts -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">System Alerts</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <i class="fas fa-database text-warning"></i>
+                                                    <strong>Database Backup</strong>
+                                                    <p class="mb-0 text-muted">Daily backup scheduled</p>
+                                                </div>
+                                                <small class="text-muted">Tonight, 2:00 AM</small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <i class="fas fa-server text-success"></i>
+                                                    <strong>System Update</strong>
+                                                    <p class="mb-0 text-muted">Version 2.1.0 deployed</p>
+                                                </div>
+                                                <small class="text-muted">2 days ago</small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

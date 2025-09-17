@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare AI - Health Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --primary-dark: #4B0082;
+            --primary-light: #9370DB;
+            --secondary: #FF6B8B;
+            --accent: #FFA500;
+            --light: rgba(255, 255, 255, 0.9);
+            --dark: #2F1B4B;
+            --success: #00C9A7;
+            --warning: #FFC75F;
+            --danger: #FF8066;
+            --info: #4FC4F7;
+            --gray: #8395a7;
+            --light-gray: rgba(236, 240, 241, 0.5);
+            --sidebar-width: 280px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: rgba(0, 0, 0, 0.1);
+            --glass-hover: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4B0082, #8A2BE2, #FF6B8B, #FFA500);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 40px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid var(--glass-border);
+            padding: 25px 0;
+            transition: var(--transition);
+            z-index: 100;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+            z-index: -1;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+            margin-bottom: 15px;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-header h3 {
+            color: white;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin: 5px 10px;
+            border-radius: 12px;
+        }
+
+        .menu-item i {
+            width: 25px;
+            margin-right: 15px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            background: var(--glass-hover);
+            padding-left: 30px;
+            transform: translateX(5px);
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item:hover i {
+            transform: translateX(5px) scale(1.1);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"><circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none" /></svg>');
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .page-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .page-title p {
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .header-tools {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            width: 200px;
+            outline: none;
+        }
+
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 2px var(--primary-light);
+            border-color: var(--primary-light);
+            width: 250px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn i {
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-light);
+            color: var(--light);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Health Metrics */
+        .health-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+
+        .metric-card:hover::before {
+            width: 8px;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-info h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-trend {
+            margin-left: auto;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .trend-up {
+            color: var(--danger);
+        }
+
+        .trend-down {
+            color: var(--success);
+        }
+
+        .trend-stable {
+            color: var(--warning);
+        }
+
+        /* Charts */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 0 25px 25px;
+        }
+
+        .chart-container {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .see-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .see-all:hover {
+            text-decoration: underline;
+            gap: 8px;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 300px;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(138, 43, 226, 0.1);
+            color: var(--primary);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-content h4 {
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .activity-content p {
+            font-size: 0.85rem;
+            color: var(--light);
+        }
+
+        .activity-time {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--light);
+            white-space: nowrap;
+        }
+
+        /* Patient List */
+        .patient-section {
+            padding: 0 25px 25px;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .patient-card {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .patient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .patient-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid var(--primary-light);
+        }
+
+        .patient-info h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .patient-info p {
+            font-size: 0.85rem;
+            color: var(--light);
+        }
+
+        .patient-status {
+            margin-left: auto;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-normal {
+            background: rgba(0, 201, 167, 0.2);
+            color: var(--success);
+        }
+
+        .status-warning {
+            background: rgba(255, 199, 95, 0.2);
+            color: var(--warning);
+        }
+
+        .status-critical {
+            background: rgba(255, 128, 102, 0.2);
+            color: var(--danger);
+        }
+
+        .patient-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .patient-metric {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .patient-metric h4 {
+            font-size: 0.8rem;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+
+        .patient-metric p {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .health-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .patient-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .health-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .patient-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            animation: float 10s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, 10px) rotate(5deg); }
+            50% { transform: translate(0, 20px) rotate(0deg); }
+            75% { transform: translate(-10px, 10px) rotate(-5deg); }
+        }
+
+        /* Pulse animation for critical metrics */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 128, 102, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 128, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 128, 102, 0); }
+        }
+
+        .pulse-warning {
+            animation: pulse 2s infinite;
+        }
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c3e50;
+        color: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 20px 0;
+        overflow-y: auto;
+    }
+
+    .logo {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .logo h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-links li {
+        margin: 5px 0;
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .nav-links a.active {
+        background: #3498db;
+        color: white;
+        border-left: 4px solid #fff;
+    }
+
+    .nav-links a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 15px 0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .sidebar {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .logo h2, .nav-links span {
+            display: none;
+        }
+
+        .nav-links a {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .nav-links a i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+    }
+    </style>
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="css/navigation.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+            <!-- Navigation will be loaded here -->
+            <div id="nav-placeholder"></div>
+    <!-- Floating background elements -->
+    <div class="floating-element" style="width: 300px; height: 300px; top: -150px; left: -150px; background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 70%);"></div>
+    <div class="floating-element" style="width: 200px; height: 200px; bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(255, 107, 139, 0.1) 0%, transparent 70%); animation-delay: -5s;"></div>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h1>AI Health Monitor</h1>
+                    <p>Track and monitor patient health metrics in real-time with AI predictions</p>
+                </div>
+                <div class="header-tools">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search patients...">
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Reading
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Health Metrics -->
+            <div class="health-metrics">
+                <div class="metric-card">
+                    <div class="metric-icon" style="color: var(--danger);">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="metric-info">
+                        <h3>Heart Rate</h3>
+                        <div class="metric-value">72 <span style="font-size: 1rem; color: var(--light);">bpm</span></div>
+                    </div>
+                    <div class="metric-trend trend-stable">
+                        <i class="fas fa-equals"></i> Stable
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="color: var(--info);">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="metric-info">
+                        <h3>Blood Pressure</h3>
+                        <div class="metric-value">120/80 <span style="font-size: 1rem; color: var(--light);">mmHg</span></div>
+                    </div>
+                    <div class="metric-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> 5%
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="color: var(--success);">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <div class="metric-info">
+                        <h3>Temperature</h3>
+                        <div class="metric-value">98.6°<span style="font-size: 1rem; color: var(--light);">F</span></div>
+                    </div>
+                    <div class="metric-trend trend-stable">
+                        <i class="fas fa-equals"></i> Normal
+                    </div>
+                </div>
+                <div class="metric-card pulse-warning">
+                    <div class="metric-icon" style="color: var(--warning);">
+                        <i class="fas fa-lungs"></i>
+                    </div>
+                    <div class="metric-info">
+                        <h3>Oxygen Level</h3>
+                        <div class="metric-value">91<span style="font-size: 1rem; color: var(--light);">%</span></div>
+                    </div>
+                    <div class="metric-trend trend-up">
+                        <i class="fas fa-exclamation-triangle"></i> Low
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-container">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Heart Rate History</h3>
+                        <a href="#" class="see-all">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <canvas id="heartRateChart" class="chart-canvas"></canvas>
+                </div>
+                <div class="activity-list">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Recent Readings</h3>
+                        <a href="#" class="see-all">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Heart Rate Reading</h4>
+                            <p>72 bpm - Normal</p>
+                        </div>
+                        <div class="activity-time">2 min ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Blood Pressure</h4>
+                            <p>120/80 mmHg - Normal</p>
+                        </div>
+                        <div class="activity-time">15 min ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Temperature</h4>
+                            <p>98.6°F - Normal</p>
+                        </div>
+                        <div class="activity-time">30 min ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="color: var(--warning);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Oxygen Alert</h4>
+                            <p>91% - Low oxygen level detected</p>
+                        </div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient List -->
+            <div class="patient-section">
+                <div class="chart-header">
+                    <h3 class="chart-title">Patient Status Overview</h3>
+                    <a href="#" class="see-all">View All Patients <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="patient-grid">
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <img src="https://xsgames.co/randomusers/avatar.php?g=female&random=2" alt="Patient" class="patient-avatar">
+                            <div class="patient-info">
+                                <h3>Sarah Johnson</h3>
+                                <p>68 years, Diabetes</p>
+                            </div>
+                            <span class="patient-status status-normal">Normal</span>
+                        </div>
+                        <div class="patient-metrics">
+                            <div class="patient-metric">
+                                <h4>Glucose</h4>
+                                <p>126 mg/dL</p>
+                            </div>
+                            <div class="patient-metric">
+                                <h4>BP</h4>
+                                <p>122/78</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <img src="https://xsgames.co/randomusers/avatar.php?g=male&random=3" alt="Patient" class="patient-avatar">
+                            <div class="patient-info">
+                                <h3>Robert Williams</h3>
+                                <p>72 years, Hypertension</p>
+                            </div>
+                            <span class="patient-status status-warning">Monitoring</span>
+                        </div>
+                        <div class="patient-metrics">
+                            <div class="patient-metric">
+                                <h4>BP</h4>
+                                <p>145/92</p>
+                            </div>
+                            <div class="patient-metric">
+                                <h4>Heart Rate</h4>
+                                <p>88 bpm</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <img src="https://xsgames.co/randomusers/avatar.php?g=female&random=4" alt="Patient" class="patient-avatar">
+                            <div class="patient-info">
+                                <h3>Margaret Brown</h3>
+                                <p>75 years, Asthma</p>
+                            </div>
+                            <span class="patient-status status-critical">Critical</span>
+                        </div>
+                        <div class="patient-metrics">
+                            <div class="patient-metric">
+                                <h4>Oxygen</h4>
+                                <p>91%</p>
+                            </div>
+                            <div class="patient-metric">
+                                <h4>Respiration</h4>
+                                <p>22/min</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session
+            localStorage.removeItem('user');
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    });
+        // Heart Rate Chart
+        const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+        const heartRateChart = new Chart(heartRateCtx, {
+            type: 'line',
+            data: {
+                labels: ['12:00 AM', '3:00 AM', '6:00 AM', '9:00 AM', '12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'],
+                datasets: [{
+                    label: 'Heart Rate (bpm)',
+                    data: [72, 68, 70, 75, 80, 78, 74, 72],
+                    borderColor: '#FF6B8B',
+                    backgroundColor: 'rgba(255, 107, 139, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: '#FF6B8B',
+                    pointHoverBorderWidth: 2,
+                    pointHoverBorderColor: '#fff',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(47, 27, 75, 0.9)',
+                        titleFont: {
+                            family: 'Poppins',
+                            size: 12
+                        },
+                        bodyFont: {
+                            family: 'Poppins',
+                            size: 14,
+                            weight: '500'
+                        },
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            callback: function(value) {
+                                return value + ' bpm';
+                            }
+                        },
+                        min: 50,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Add active class to current menu item
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Simulate real-time data updates
+        function updateMetrics() {
+            // Random fluctuations for demo purposes
+            const heartRate = 70 + Math.floor(Math.random() * 10);
+            document.querySelectorAll('.metric-card .metric-value')[0].innerHTML = `${heartRate} <span style="font-size: 1rem; color: var(--light);">bpm</span>`;
+            
+            // Update chart with new data point
+            const chart = heartRateChart;
+            chart.data.labels.push(new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.push(heartRate);
+            chart.data.datasets[0].data.shift();
+            chart.update();
+        }
+
+        // Update metrics every 30 seconds
+        setInterval(updateMetrics, 30000);
+        fetch('navigation.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('nav-placeholder').innerHTML = data;
+        });
+    </script>
+    <!-- Load navigation -->
+    <script>
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                // Initialize main content margin
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '250px';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.transition = 'margin-left 0.3s ease';
+                }
+                
+                // Add click event for menu toggle
+                const menuToggle = document.getElementById('menuToggle');
+                const sidebar = document.querySelector('.sidebar');
+                if (menuToggle && sidebar) {
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                        }
+                    });
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+</body>
+</html>

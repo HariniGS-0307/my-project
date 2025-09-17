@@ -1,0 +1,261 @@
+{% extends "base/base.html" %}
+
+{% block title %}Delivery Schedule - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Delivery Schedule</h4>
+                        <a href="{{ url_for('delivery.tracking') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-truck"></i> Live Tracking
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                <input type="date" class="form-control" id="scheduleDate" value="{{ today }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-end">
+                                <div class="me-2">
+                                    <select class="form-select" id="filterDriver">
+                                        <option selected>All Drivers</option>
+                                        <option>Mike Johnson</option>
+                                        <option>Sarah Williams</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="form-select" id="viewMode">
+                                        <option selected>Daily View</option>
+                                        <option>Weekly View</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Patient</th>
+                                    <th>Address</th>
+                                    <th>Medications</th>
+                                    <th>Special Instructions</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>09:00 AM</td>
+                                    <td>
+                                        <div>
+                                            <strong>Mary Smith</strong>
+                                            <br><small class="text-muted">DL-00124</small>
+                                        </div>
+                                    </td>
+                                    <td>789 Pine St, Apt 2B</td>
+                                    <td>
+                                        <ul class="mb-0">
+                                            <li>Atorvastatin 20mg (30 tablets)</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <small>Ring doorbell twice</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Delivered</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('delivery.view_delivery', delivery_id=2) }}" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('delivery.track_on_map', delivery_id=2) }}" class="btn btn-sm btn-outline-info" title="Track on Map">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10:30 AM</td>
+                                    <td>
+                                        <div>
+                                            <strong>Robert Johnson</strong>
+                                            <br><small class="text-muted">DL-00125</small>
+                                        </div>
+                                    </td>
+                                    <td>321 Elm St</td>
+                                    <td>
+                                        <ul class="mb-0">
+                                            <li>Levothyroxine 50mcg (30 tablets)</li>
+                                            <li>Aspirin 81mg (90 tablets)</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <small>Leave at front desk if not home</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning">Pending</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('delivery.view_delivery', delivery_id=3) }}" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('delivery.reschedule_delivery', delivery_id=3) }}" class="btn btn-sm btn-outline-warning" title="Reschedule">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>01:00 PM</td>
+                                    <td>
+                                        <div>
+                                            <strong>John Doe</strong>
+                                            <br><small class="text-muted">DL-00123</small>
+                                        </div>
+                                    </td>
+                                    <td>456 Oak Ave</td>
+                                    <td>
+                                        <ul class="mb-0">
+                                            <li>Lisinopril 10mg (30 tablets)</li>
+                                            <li>Metformin 500mg (60 tablets)</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <small>Call patient upon arrival</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">In Transit</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('delivery.view_delivery', delivery_id=1) }}" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('delivery.track_on_map', delivery_id=1) }}" class="btn btn-sm btn-outline-info" title="Track on Map">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>03:30 PM</td>
+                                    <td>
+                                        <div>
+                                            <strong>Jennifer Brown</strong>
+                                            <br><small class="text-muted">DL-00126</small>
+                                        </div>
+                                    </td>
+                                    <td>654 Maple Dr</td>
+                                    <td>
+                                        <ul class="mb-0">
+                                            <li>Metoprolol 25mg (30 tablets)</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <small>Refrigerated medications</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning">Pending</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('delivery.view_delivery', delivery_id=4) }}" class="btn btn-sm btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('delivery.reschedule_delivery', delivery_id=4) }}" class="btn btn-sm btn-outline-warning" title="Reschedule">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Driver Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Mike Johnson
+                                            <span class="badge bg-primary rounded-pill">3/5 deliveries</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Sarah Williams
+                                            <span class="badge bg-warning rounded-pill">1/4 deliveries</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Delivery Statistics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row text-center">
+                                        <div class="col-6">
+                                            <h3 class="text-primary">12</h3>
+                                            <p class="mb-0">Total Today</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <h3 class="text-success">8</h3>
+                                            <p class="mb-0">Completed</p>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center mt-2">
+                                        <div class="col-6">
+                                            <h3 class="text-warning">3</h3>
+                                            <p class="mb-0">In Progress</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <h3 class="text-danger">1</h3>
+                                            <p class="mb-0">Pending</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Schedule Optimization</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><i class="fas fa-route text-info me-2"></i> Optimal route calculated</p>
+                                    <p><i class="fas fa-clock text-success me-2"></i> Estimated completion: 4:30 PM</p>
+                                    <p><i class="fas fa-gas-pump text-warning me-2"></i> Fuel efficiency: 85%</p>
+                                    <button class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-sync-alt"></i> Re-optimize Routes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

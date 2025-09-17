@@ -1,0 +1,309 @@
+<nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <a href="{{ url_for('dashboard.index') }}" class="sidebar-brand">
+            <div class="logo-icon">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <span class="logo-text">AI Elderly<br>Medicare</span>
+        </a>
+        <button class="sidebar-toggler" type="button" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-content">
+        <div class="user-profile">
+            <div class="avatar">
+                <img src="{{ current_user.avatar_url if current_user.is_authenticated else url_for('static', filename='img/default-avatar.png') }}" 
+                     alt="User Avatar" class="rounded-circle">
+            </div>
+            <div class="user-info">
+                <span class="user-name">
+                    {% if current_user.is_authenticated %}
+                        {{ current_user.full_name }}
+                    {% else %}
+                        Guest User
+                    {% endif %}
+                </span>
+                <span class="user-role">
+                    {% if current_user.is_authenticated %}
+                        {{ current_user.role|title }}
+                    {% else %}
+                        Guest
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <!-- Dashboard -->
+                <li class="nav-item {% if request.endpoint == 'dashboard.index' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('dashboard.index') }}">
+                        <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Appointments -->
+                <li class="nav-item has-submenu {% if 'appointment' in request.endpoint %}active{% endif %}">
+                    <a href="#appointmentSubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                        <span class="title">Appointments</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'appointment' in request.endpoint %}show{% endif %}" id="appointmentSubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('appointments.appointment_calendar') }}">
+                                <i class="fas fa-calendar-alt me-2"></i>Calendar View
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('appointments.book_appointment') }}">
+                                <i class="fas fa-plus-circle me-2"></i>Book Appointment
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('appointments.appointment_history') }}">
+                                <i class="fas fa-history me-2"></i>Appointment History
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('appointments.video_consultation') }}">
+                                <i class="fas fa-video me-2"></i>Video Consultation
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Medications -->
+                <li class="nav-item has-submenu {% if 'medication' in request.endpoint %}active{% endif %}">
+                    <a href="#medicationSubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-pills"></i></span>
+                        <span class="title">Medications</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'medication' in request.endpoint %}show{% endif %}" id="medicationSubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('medications.medication_list') }}">
+                                <i class="fas fa-list me-2"></i>Medication List
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('medications.medication_schedule') }}">
+                                <i class="fas fa-calendar-day me-2"></i>Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('medications.medication_reminder') }}">
+                                <i class="fas fa-bell me-2"></i>Reminders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('medications.adherence_report') }}">
+                                <i class="fas fa-chart-line me-2"></i>Adherence Report
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Medicine Delivery -->
+                <li class="nav-item has-submenu {% if 'delivery' in request.endpoint %}active{% endif %}">
+                    <a href="#deliverySubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-truck-medical"></i></span>
+                        <span class="title">Medicine Delivery</span>
+                        <span class="badge bg-danger rounded-pill float-end">3</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'delivery' in request.endpoint %}show{% endif %}" id="deliverySubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('delivery.delivery_schedule') }}">
+                                <i class="fas fa-calendar-plus me-2"></i>Schedule Delivery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('delivery.delivery_tracking') }}">
+                                <i class="fas fa-map-marked-alt me-2"></i>Track Delivery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('delivery.delivery_history') }}">
+                                <i class="fas fa-history me-2"></i>Delivery History
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('delivery.route_map') }}">
+                                <i class="fas fa-route me-2"></i>Route Map
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Health Records -->
+                <li class="nav-item has-submenu {% if 'health' in request.endpoint or 'record' in request.endpoint %}active{% endif %}">
+                    <a href="#healthSubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-heartbeat"></i></span>
+                        <span class="title">Health Records</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'health' in request.endpoint or 'record' in request.endpoint %}show{% endif %}" id="healthSubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('health.vitals') }}">
+                                <i class="fas fa-heartbeat me-2"></i>Vital Signs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('health.lab_results') }}">
+                                <i class="fas fa-flask me-2"></i>Lab Results
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('health.immunizations') }}">
+                                <i class="fas fa-syringe me-2"></i>Immunizations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('health.allergies') }}">
+                                <i class="fas fa-allergies me-2"></i>Allergies
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Notifications -->
+                <li class="nav-item {% if 'notification' in request.endpoint %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('notifications.list_notifications') }}">
+                        <span class="icon"><i class="fas fa-bell"></i></span>
+                        <span class="title">Notifications</span>
+                        <span class="badge bg-primary rounded-pill float-end">5</span>
+                    </a>
+                </li>
+
+                <!-- Messages -->
+                <li class="nav-item {% if 'message' in request.endpoint %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('messages.inbox') }}">
+                        <span class="icon"><i class="fas fa-envelope"></i></span>
+                        <span class="title">Messages</span>
+                        <span class="badge bg-success rounded-pill float-end">3</span>
+                    </a>
+                </li>
+
+                <!-- Reports & Analytics -->
+                <li class="nav-item has-submenu {% if 'report' in request.endpoint or 'analytics' in request.endpoint %}active{% endif %}">
+                    <a href="#reportsSubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-chart-bar"></i></span>
+                        <span class="title">Reports & Analytics</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'report' in request.endpoint or 'analytics' in request.endpoint %}show{% endif %}" id="reportsSubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('reports.health_metrics') }}">
+                                <i class="fas fa-chart-line me-2"></i>Health Metrics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('reports.medication_history') }}">
+                                <i class="fas fa-pills me-2"></i>Medication History
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('reports.appointment_history') }}">
+                                <i class="fas fa-calendar-check me-2"></i>Appointment History
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('reports.generate_report') }}">
+                                <i class="fas fa-file-export me-2"></i>Generate Report
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Settings -->
+                <li class="nav-item has-submenu {% if 'settings' in request.endpoint or 'profile' in request.endpoint %}active{% endif %}">
+                    <a href="#settingsSubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-cog"></i></span>
+                        <span class="title">Settings</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'settings' in request.endpoint or 'profile' in request.endpoint %}show{% endif %}" id="settingsSubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('profile.view') }}">
+                                <i class="fas fa-user me-2"></i>My Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('settings.account') }}">
+                                <i class="fas fa-user-cog me-2"></i>Account Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('settings.notifications') }}">
+                                <i class="fas fa-bell me-2"></i>Notification Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('settings.privacy') }}">
+                                <i class="fas fa-shield-alt me-2"></i>Privacy Settings
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Admin Panel (Only visible to admins) -->
+                {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                <li class="nav-item has-submenu {% if 'admin' in request.endpoint %}active{% endif %}">
+                    <a href="#adminSubmenu" data-bs-toggle="collapse" class="nav-link">
+                        <span class="icon"><i class="fas fa-user-shield"></i></span>
+                        <span class="title">Admin Panel</span>
+                        <span class="badge bg-danger rounded-pill float-end">Admin</span>
+                        <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="collapse submenu {% if 'admin' in request.endpoint %}show{% endif %}" id="adminSubmenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.manage_users') }}">
+                                <i class="fas fa-users me-2"></i>Manage Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.system_settings') }}">
+                                <i class="fas fa-cogs me-2"></i>System Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.audit_logs') }}">
+                                <i class="fas fa-clipboard-list me-2"></i>Audit Logs
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-footer">
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-logout w-100">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </a>
+        {% else %}
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt me-2"></i> Login
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light">
+                    <i class="fas fa-user-plus me-2"></i> Register
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- Overlay for mobile view -->
+<div class="sidebar-overlay"></div>

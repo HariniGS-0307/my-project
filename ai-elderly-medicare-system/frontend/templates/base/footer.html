@@ -1,0 +1,173 @@
+<!-- Footer -->
+<footer class="footer mt-auto py-4 bg-light border-top">
+    <div class="container">
+        <div class="row g-4">
+            <!-- About Section -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <div class="footer-logo mb-3">
+                    <i class="fas fa-heartbeat text-primary me-2"></i>
+                    <span class="fw-bold">AI Elderly Medicare</span>
+                </div>
+                <p class="text-muted small">
+                    Providing compassionate and comprehensive healthcare services for the elderly through innovative AI technology.
+                </p>
+                <div class="social-links mt-3">
+                    <a href="#" class="text-decoration-none me-2" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none me-2" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none me-2" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="h6 mb-3">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{{ url_for('about.us') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-chevron-right small me-1"></i> About Us
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('services.index') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-chevron-right small me-1"></i> Our Services
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('doctors.index') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-chevron-right small me-1"></i> Our Doctors
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('blog.index') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-chevron-right small me-1"></i> Health Blog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('contact.us') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-chevron-right small me-1"></i> Contact Us
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Services -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="h6 mb-3">Our Services</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{{ url_for('services.detail', service='telemedicine') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-video small me-1"></i> Telemedicine
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('services.detail', service='medication-management') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-pills small me-1"></i> Medication Management
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('services.detail', service='home-healthcare') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-home small me-1"></i> Home Healthcare
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('services.detail', service='emergency-care') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-ambulance small me-1"></i> Emergency Care
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('services.index') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-plus-circle small me-1"></i> View All Services
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="h6 mb-3">Contact Us</h5>
+                <ul class="list-unstyled text-muted small">
+                    <li class="mb-3">
+                        <div class="d-flex">
+                            <i class="fas fa-map-marker-alt text-primary mt-1 me-2"></i>
+                            <span>123 Healthcare St, Medical District, City, Country 12345</span>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="d-flex">
+                            <i class="fas fa-phone-alt text-primary mt-1 me-2"></i>
+                            <div>
+                                <div>+1 (555) 123-4567</div>
+                                <div class="text-muted small">Mon-Fri, 8am-6pm</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="d-flex">
+                            <i class="fas fa-envelope text-primary mt-1 me-2"></i>
+                            <span>info@elderlymedicare.com</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="d-flex">
+                            <i class="fas fa-clock text-primary mt-1 me-2"></i>
+                            <div>
+                                <div>24/7 Emergency</div>
+                                <div class="text-danger fw-bold">+1 (555) 987-6543</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Copyright and Bottom Links -->
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                <p class="small text-muted mb-0">
+                    &copy; {{ now.year }} AI Elderly Medicare. All rights reserved.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <a href="{{ url_for('privacy.policy') }}" class="text-decoration-none text-muted small">
+                            Privacy Policy
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="text-muted">•</span>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="{{ url_for('terms.service') }}" class="text-decoration-none text-muted small">
+                            Terms of Service
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="text-muted">•</span>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="{{ url_for('sitemap.index') }}" class="text-decoration-none text-muted small">
+                            Sitemap
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button type="button" class="btn btn-primary btn-floating btn-lg rounded-circle" id="btn-back-to-top">
+    <i class="fas fa-arrow-up"></i>
+</button>

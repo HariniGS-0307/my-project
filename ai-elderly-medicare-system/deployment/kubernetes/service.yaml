@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-elderly-medicare-system
+  labels:
+    app: ai-elderly-medicare-system
+spec:
+  selector:
+    app: ai-elderly-medicare-system
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-elderly-medicare-system-db
+  labels:
+    app: ai-elderly-medicare-system-db
+spec:
+  selector:
+    app: ai-elderly-medicare-system-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-elderly-medicare-system-redis
+  labels:
+    app: ai-elderly-medicare-system-redis
+spec:
+  selector:
+    app: ai-elderly-medicare-system-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP

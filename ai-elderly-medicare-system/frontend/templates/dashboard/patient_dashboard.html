@@ -1,0 +1,149 @@
+{% extends "base/base.html" %}
+
+{% block title %}Patient Dashboard - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Patient Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Patient Overview</h2>
+                            <p class="text-muted">Manage your health information and appointments.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    {% include 'dashboard/widgets/stats_cards.html' %}
+                    
+                    <div class="row mt-4">
+                        <!-- Health Summary -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Health Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Blood Pressure:</strong> 120/80 mmHg</p>
+                                            <p><strong>Heart Rate:</strong> 72 bpm</p>
+                                            <p><strong>Blood Sugar:</strong> 95 mg/dL</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Weight:</strong> 70 kg</p>
+                                            <p><strong>Height:</strong> 170 cm</p>
+                                            <p><strong>BMI:</strong> 24.2</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <a href="{{ url_for('health_records.view_records') }}" class="btn btn-outline-primary">
+                                            <i class="fas fa-file-medical"></i> View Detailed Records
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="col-md-4">
+                            {% include 'dashboard/widgets/quick_actions.html' %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <!-- Upcoming Appointments -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Upcoming Appointments</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Doctor</th>
+                                                    <th>Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>June 15, 2023</td>
+                                                    <td>Dr. Smith</td>
+                                                    <td>Cardiology</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>June 22, 2023</td>
+                                                    <td>Dr. Johnson</td>
+                                                    <td>General Checkup</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <a href="{{ url_for('appointments.book_appointment') }}" class="btn btn-primary">
+                                            <i class="fas fa-calendar-plus"></i> Book New Appointment
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Medication Schedule -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Medication Schedule</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Medication</th>
+                                                    <th>Dosage</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Lisinopril</td>
+                                                    <td>10mg</td>
+                                                    <td>8:00 AM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Metformin</td>
+                                                    <td>500mg</td>
+                                                    <td>12:00 PM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Atorvastatin</td>
+                                                    <td>20mg</td>
+                                                    <td>8:00 PM</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <a href="{{ url_for('medications.list_medications') }}" class="btn btn-primary">
+                                            <i class="fas fa-pills"></i> View All Medications
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

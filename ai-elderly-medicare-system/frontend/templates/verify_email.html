@@ -1,0 +1,37 @@
+{% extends "base/base.html" %}
+
+{% block title %}Verify Email - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3><i class="fas fa-envelope"></i> Verify Your Email</h3>
+                </div>
+                <div class="card-body text-center">
+                    <p class="text-muted">
+                        We've sent a verification email to <strong>{{ email }}</strong>.
+                        Please check your inbox and click the verification link to activate your account.
+                    </p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        If you don't see the email, please check your spam folder.
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('auth.resend_verification') }}">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(class="btn btn-outline-primary") }}
+                    </form>
+                    
+                    <div class="mt-3">
+                        <a href="{{ url_for('auth.login') }}">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

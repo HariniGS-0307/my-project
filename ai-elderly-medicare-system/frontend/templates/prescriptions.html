@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Prescription Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --primary-dark: #4B0082;
+            --primary-light: #9370DB;
+            --secondary: #FF6B8B;
+            --accent: #FFA500;
+            --light: rgba(255, 255, 255, 0.85);
+            --dark: #2F1B4B;
+            --success: #00C9A7;
+            --warning: #FFC75F;
+            --danger: #FF8066;
+            --info: #4FC4F7;
+            --gray: #8395a7;
+            --light-gray: rgba(236, 240, 241, 0.5);
+            --sidebar-width: 280px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #8A2BE2, #4B0082, #FF6B8B, #FFA500, #9370DB);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 40px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(43, 7, 89, 0.5);
+            color: white;
+            backdrop-filter: blur(15px);
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+            position: relative;
+            height: 100%;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(107, 36, 178, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item i {
+            width: 25px;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 30px;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid var(--accent);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .page-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-tools {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 10px 20px;
+            width: 300px;
+            transition: var(--transition);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+        }
+
+        /* Prescriptions List */
+        .prescriptions-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+        }
+
+        .prescriptions-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .list-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .prescription-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .prescription-item:last-child {
+            border-bottom: none;
+        }
+
+        .prescription-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .prescription-info {
+            flex: 1;
+        }
+
+        .prescription-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prescription-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 8px;
+        }
+
+        .prescription-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(0, 201, 167, 0.2);
+            color: var(--success);
+        }
+
+        .status-expired {
+            background: rgba(255, 128, 102, 0.2);
+            color: var(--danger);
+        }
+
+        .status-pending {
+            background: rgba(255, 199, 95, 0.2);
+            color: var(--warning);
+        }
+
+        /* Add Prescription Form */
+        .add-prescription-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .prescriptions-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .add-prescription-form {
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .prescription-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .prescription-actions {
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c3e50;
+        color: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 20px 0;
+        overflow-y: auto;
+    }
+
+    .logo {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .logo h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-links li {
+        margin: 5px 0;
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .nav-links a.active {
+        background: #3498db;
+        color: white;
+        border-left: 4px solid #fff;
+    }
+
+    .nav-links a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 15px 0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .sidebar {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .logo h2, .nav-links span {
+            display: none;
+        }
+
+        .nav-links a {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .nav-links a i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+    }
+    </style>
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="css/navigation.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+            <!-- Navigation will be loaded here -->
+            <div id="nav-placeholder"></div>
+    <div class="container">
+        
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h1>Prescription Management</h1>
+                    <p>Manage and track patient prescriptions</p>
+                </div>
+                <div class="header-tools">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search prescriptions...">
+                    </div>
+                    <button class="btn btn-primary" id="addPrescriptionBtn">
+                        <i class="fas fa-plus"></i> New Prescription
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="prescriptions-container">
+                    <!-- Prescriptions List -->
+                    <div class="prescriptions-list">
+                        <div class="list-header">
+                            <h2 class="list-title">Recent Prescriptions</h2>
+                            <span class="text-muted">8 active, 2 expired</span>
+                        </div>
+
+                        <!-- Prescription Item -->
+                        <div class="prescription-item fade-in">
+                            <div class="prescription-info">
+                                <div class="prescription-title">
+                                    <i class="fas fa-prescription"></i>
+                                    <span>Metformin 500mg</span>
+                                    <span class="status-badge status-active">Active</span>
+                                </div>
+                                <p>Patient: John Doe (ID: #P-1001)</p>
+                                <div class="prescription-meta">
+                                    <span><i class="far fa-calendar"></i> Issued: 2023-10-15</span>
+                                    <span><i class="far fa-calendar-check"></i> Expires: 2024-01-15</span>
+                                    <span><i class="fas fa-syringe"></i> Refills: 2 remaining</span>
+                                </div>
+                            </div>
+                            <div class="prescription-actions">
+                                <button class="action-btn" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn" title="Print">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                                <button class="action-btn" title="Renew">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- More prescription items would go here -->
+                        <div class="prescription-item fade-in" style="animation-delay: 0.1s;">
+                            <div class="prescription-info">
+                                <div class="prescription-title">
+                                    <i class="fas fa-prescription"></i>
+                                    <span>Lisinopril 10mg</span>
+                                    <span class="status-badge status-pending">Pending Refill</span>
+                                </div>
+                                <p>Patient: Mary Johnson (ID: #P-1002)</p>
+                                <div class="prescription-meta">
+                                    <span><i class="far fa-calendar"></i> Issued: 2023-11-01</span>
+                                    <span><i class="far fa-calendar-check"></i> Expires: 2024-02-01</span>
+                                    <span><i class="fas fa-syringe"></i> Refills: 0 remaining</span>
+                                </div>
+                            </div>
+                            <div class="prescription-actions">
+                                <button class="action-btn" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn" title="Print">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                                <button class="action-btn" title="Renew">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Prescription Form -->
+                    <div class="add-prescription-form">
+                        <h3 class="list-title">New Prescription</h3>
+                        <form id="prescriptionForm">
+                            <div class="form-group">
+                                <label for="patientSelect">Patient</label>
+                                <select id="patientSelect" class="form-control" required>
+                                    <option value="">Select a patient</option>
+                                    <option value="1001">John Doe (ID: #P-1001)</option>
+                                    <option value="1002">Mary Johnson (ID: #P-1002)</option>
+                                    <option value="1003">Robert Smith (ID: #P-1003)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="medication">Medication</label>
+                                <input type="text" id="medication" class="form-control" placeholder="e.g., Metformin 500mg" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dosage">Dosage Instructions</label>
+                                <textarea id="dosage" class="form-control" placeholder="e.g., Take one tablet twice daily with meals" required></textarea>
+                            </div>
+                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label for="issueDate">Issue Date</label>
+                                    <input type="date" id="issueDate" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date</label>
+                                    <input type="date" id="expiryDate" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="refills">Number of Refills</label>
+                                <input type="number" id="refills" class="form-control" min="0" value="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Additional Notes</label>
+                                <textarea id="notes" class="form-control" placeholder="Any special instructions..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Prescription</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session
+            localStorage.removeItem('user');
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    });
+        // Set default dates
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const nextMonth = new Date();
+            nextMonth.setMonth(today.getMonth() + 3);
+            
+            document.getElementById('issueDate').valueAsDate = today;
+            document.getElementById('expiryDate').valueAsDate = nextMonth;
+            
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const items = document.querySelectorAll('.prescription-item');
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Form submission
+            document.getElementById('prescriptionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add your form submission logic here
+                alert('Prescription saved successfully!');
+                this.reset();
+            });
+        });
+        fetch('navigation.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('nav-placeholder').innerHTML = data;
+        });
+    </script>
+    <!-- Load navigation -->
+    <script>
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                // Initialize main content margin
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '250px';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.transition = 'margin-left 0.3s ease';
+                }
+                
+                // Add click event for menu toggle
+                const menuToggle = document.getElementById('menuToggle');
+                const sidebar = document.querySelector('.sidebar');
+                if (menuToggle && sidebar) {
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                        }
+                    });
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+</body>
+</html>

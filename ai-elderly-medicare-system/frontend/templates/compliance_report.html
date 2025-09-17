@@ -1,0 +1,355 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Compliance Reports - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Compliance Reports</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary">Generate Report</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Export PDF</button>
+      </div>
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+        <span data-feather="calendar"></span>
+        This quarter
+      </button>
+    </div>
+  </div>
+
+  <!-- Compliance Summary -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Compliance Overview</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="text-center p-3">
+                <div class="display-4 text-primary">96.8%</div>
+                <p class="mb-0">Overall Compliance Rate</p>
+                <small class="text-muted">Target: 95%+</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="text-center p-3">
+                <div class="display-4 text-success">12</div>
+                <p class="mb-0">Audits Passed</p>
+                <small class="text-muted">Out of 12 conducted</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="text-center p-3">
+                <div class="display-4 text-warning">3</div>
+                <p class="mb-0">Pending Actions</p>
+                <small class="text-muted">Require attention</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="text-center p-3">
+                <div class="display-4 text-danger">1</div>
+                <p class="mb-0">Non-Conformances</p>
+                <small class="text-muted">Being addressed</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance Categories -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">HIPAA Compliance</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Compliance Rate</span>
+            <span class="fw-bold">98.5%</span>
+          </div>
+          <div class="progress mb-3">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 98.5%"></div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Patient Data Encryption
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Access Controls
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Audit Logs
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Staff Training
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">FDA Compliance</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Compliance Rate</span>
+            <span class="fw-bold">95.2%</span>
+          </div>
+          <div class="progress mb-3">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: 95.2%"></div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Drug Storage
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Temperature Monitoring
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Expiration Tracking
+              <span class="badge bg-warning rounded-pill">Pending</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Documentation
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0">CMS Compliance</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Compliance Rate</span>
+            <span class="fw-bold">97.1%</span>
+          </div>
+          <div class="progress mb-3">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 97.1%"></div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Billing Accuracy
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Care Plan Documentation
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Quality Measures
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Patient Rights
+              <span class="badge bg-success rounded-pill">Compliant</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Compliance Activities -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Recent Compliance Activities</h5>
+          <button class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-plus"></i> Log Activity
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Activity</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Responsible</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jun 15, 2023</td>
+                  <td>Quarterly HIPAA Training</td>
+                  <td>Privacy & Security</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td>Sarah Johnson</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jun 12, 2023</td>
+                  <td>Drug Storage Audit</td>
+                  <td>FDA Compliance</td>
+                  <td><span class="badge bg-warning">Pending Review</span></td>
+                  <td>Michael Brown</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jun 10, 2023</td>
+                  <td>Patient Rights Policy Update</td>
+                  <td>CMS Compliance</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td>Robert Smith</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jun 5, 2023</td>
+                  <td>Annual Security Risk Assessment</td>
+                  <td>Privacy & Security</td>
+                  <td><span class="badge bg-danger">Non-Conformance</span></td>
+                  <td>IT Security Team</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>May 28, 2023</td>
+                  <td>Billing Compliance Check</td>
+                  <td>CMS Compliance</td>
+                  <td><span class="badge bg-success">Completed</span></td>
+                  <td>Finance Department</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <nav aria-label="Compliance activities pagination">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Compliance Deadlines -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Upcoming Compliance Deadlines</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">Annual HIPAA Audit</h6>
+                <small class="text-muted">High Priority</small>
+              </div>
+              <p class="mb-1">Comprehensive review of all HIPAA policies and procedures</p>
+              <small class="text-muted">Due: Jul 15, 2023</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">CMS Quality Reporting</h6>
+                <small class="text-muted">Medium Priority</small>
+              </div>
+              <p class="mb-1">Submission of quality measures for Medicare reimbursement</p>
+              <small class="text-muted">Due: Aug 1, 2023</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">FDA Drug Storage Certification</h6>
+                <small class="text-muted">High Priority</small>
+              </div>
+              <p class="mb-1">Renewal of drug storage facility certification</p>
+              <small class="text-muted">Due: Aug 20, 2023</small>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Compliance Resources</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">HIPAA Training Materials</h6>
+                <small class="text-muted">PDF</small>
+              </div>
+              <small class="text-muted">Updated: Jun 10, 2023</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">FDA Compliance Guidelines</h6>
+                <small class="text-muted">DOCX</small>
+              </div>
+              <small class="text-muted">Updated: May 22, 2023</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">CMS Billing Requirements</h6>
+                <small class="text-muted">PDF</small>
+              </div>
+              <small class="text-muted">Updated: Apr 15, 2023</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">Security Policy Templates</h6>
+                <small class="text-muted">ZIP</small>
+              </div>
+              <small class="text-muted">Updated: Mar 30, 2023</small>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Compliance report page loaded');
+  });
+</script>
+{% endblock %}

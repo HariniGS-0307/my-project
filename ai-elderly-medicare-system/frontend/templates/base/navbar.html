@@ -1,0 +1,172 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container-fluid">
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Search Bar -->
+        <form class="d-none d-md-flex search-form me-auto" role="search">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input class="form-control border-start-0" type="search" placeholder="Search patients, medications, reports..." 
+                       aria-label="Search">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+
+        <!-- Navbar Right -->
+        <div class="navbar-nav align-items-center ms-auto">
+            <!-- Search Toggle for Mobile -->
+            <div class="d-md-none me-2">
+                <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#mobileSearch" aria-expanded="false" aria-controls="mobileSearch">
+                    <i class="fas fa-search fa-lg"></i>
+                </button>
+            </div>
+
+            <!-- Notifications Dropdown -->
+            <div class="nav-item dropdown me-2">
+                <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" 
+                   aria-expanded="false">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                        <span class="visually-hidden">unread notifications</span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-notification">
+                    <div class="dropdown-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Notifications</h6>
+                        <a href="{{ url_for('notifications.list_notifications') }}" class="text-primary small">
+                            View All
+                        </a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="notification-list">
+                        <a href="#" class="dropdown-item">
+                            <div class="d-flex">
+                                <div class="notification-icon bg-primary text-white">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1">Appointment Reminder</h6>
+                                    <p class="mb-0 small text-muted">Your appointment is in 1 hour</p>
+                                    <span class="small text-muted">10 min ago</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <div class="d-flex">
+                                <div class="notification-icon bg-success text-white">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1">Prescription Ready</h6>
+                                    <p class="mb-0 small text-muted">Your prescription is ready for pickup</p>
+                                    <span class="small text-muted">2 hours ago</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Dropdown -->
+            <div class="nav-item dropdown me-2">
+                <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" 
+                   aria-expanded="false">
+                    <i class="fas fa-envelope fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                        2
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-messages">
+                    <div class="dropdown-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Messages</h6>
+                        <a href="{{ url_for('messages.inbox') }}" class="text-primary small">View All</a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="message-list">
+                        <a href="#" class="dropdown-item">
+                            <div class="d-flex">
+                                <img src="{{ url_for('static', filename='img/doctor-1.jpg') }}" 
+                                     class="rounded-circle me-2" width="40" height="40" alt="Doctor">
+                                <div class="ms-1">
+                                    <h6 class="mb-0">Dr. Sarah Johnson</h6>
+                                    <p class="mb-0 small text-muted">Your test results are ready</p>
+                                    <span class="small text-muted">1 hour ago</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <div class="d-flex">
+                                <img src="{{ url_for('static', filename='img/pharmacy-logo.png') }}" 
+                                     class="rounded-circle me-2" width="40" height="40" alt="Pharmacy">
+                                <div class="ms-1">
+                                    <h6 class="mb-0">MediCare Pharmacy</h6>
+                                    <p class="mb-0 small text-muted">Your order has been shipped</p>
+                                    <span class="small text-muted">3 hours ago</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Dropdown -->
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" 
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="avatar me-2">
+                        <img src="{{ current_user.avatar_url if current_user.is_authenticated else url_for('static', filename='img/default-avatar.png') }}" 
+                             class="rounded-circle" width="36" height="36" alt="User">
+                    </div>
+                    <span class="d-none d-lg-inline">
+                        {{ current_user.first_name if current_user.is_authenticated else 'Guest' }}
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('profile.view') }}">
+                            <i class="fas fa-user me-2"></i> My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('settings.profile') }}">
+                            <i class="fas fa-cog me-2"></i> Settings
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Search -->
+<div class="collapse bg-light" id="mobileSearch">
+    <div class="container-fluid py-2">
+        <form class="d-flex" role="search">
+            <div class="input-group">
+                <input class="form-control" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<!-- Top Navigation Bar -->
+<nav class="top-navbar navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <!-- Brand/Logo -->
+        <a class="navbar-brand" href="dashboard.html">
+            <i class="fas fa-heartbeat me-2"></i>
+            <span>MediCare AI</span>
+        </a>
+        
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Navigation Links -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto">
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.html">
+                        <i class="fas fa-tachometer-alt me-1"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                
+                <!-- Patients -->
+                <li class="nav-item">
+                    <a class="nav-link" href="patients.html">
+                        <i class="fas fa-user-injured me-1"></i>
+                        <span>Patients</span>
+                    </a>
+                </li>
+                
+                <!-- Medications -->
+                <li class="nav-item">
+                    <a class="nav-link" href="medications.html">
+                        <i class="fas fa-pills me-1"></i>
+                        <span>Medications</span>
+                    </a>
+                </li>
+                
+                <!-- Schedule -->
+                <li class="nav-item">
+                    <a class="nav-link" href="schedule.html">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        <span>Schedule</span>
+                    </a>
+                </li>
+                
+                <!-- Health Management Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="healthManagementDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-heartbeat me-1"></i>
+                        <span>Health Management</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="reminders.html">
+                            <i class="fas fa-bell me-2"></i>Reminders
+                        </a></li>
+                        <li><a class="dropdown-item" href="supply-chain.html">
+                            <i class="fas fa-truck me-2"></i>Supply Chain
+                        </a></li>
+                        <li><a class="dropdown-item" href="health-monitor.html">
+                            <i class="fas fa-heartbeat me-2"></i>Health Monitor
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Analytics Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="analyticsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-line me-1"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="analytics.html">
+                            <i class="fas fa-chart-bar me-2"></i>Analytics
+                        </a></li>
+                        <li><a class="dropdown-item" href="reports.html">
+                            <i class="fas fa-file-alt me-2"></i>Reports
+                        </a></li>
+                        <li><a class="dropdown-item" href="prescriptions.html">
+                            <i class="fas fa-prescription me-2"></i>Prescriptions
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <!-- Right-aligned items -->
+            <ul class="navbar-nav ms-auto">
+                <!-- Notifications -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                        <li><h6 class="dropdown-header">Notifications</h6></li>
+                        <li><a class="dropdown-item" href="#">New appointment scheduled</a></li>
+                        <li><a class="dropdown-item" href="#">Prescription refill needed</a></li>
+                        <li><a class="dropdown-item" href="#">New lab results available</a></li>
+                    </ul>
+                </li>
+                
+                <!-- User Profile -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle user-profile" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="User">
+                        <span class="d-none d-lg-inline">Dr. Smith</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="profile.html">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a></li>
+                        <li><a class="dropdown-item" href="settings.html">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,2 @@
+This is a placeholder for the illustrations directory.
+In a real implementation, this directory would contain various illustration images used throughout the AI Elderly Medicare System.

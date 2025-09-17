@@ -1,0 +1,141 @@
+{% extends "base/base.html" %}
+
+{% block title %}Upload Prescription - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Upload Prescription</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Upload Prescription</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{ url_for('medications.upload_prescription') }}" enctype="multipart/form-data">
+                                        {{ form.hidden_tag() }}
+                                        
+                                        <div class="mb-3">
+                                            <label for="patient" class="form-label">Select Patient</label>
+                                            <select class="form-select" id="patient" name="patient">
+                                                <option selected>Select patient</option>
+                                                <option>John Doe</option>
+                                                <option>Mary Smith</option>
+                                                <option>Robert Johnson</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="prescriber" class="form-label">Prescribing Physician</label>
+                                            <input type="text" class="form-control" id="prescriber" name="prescriber" placeholder="Enter physician name">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="prescriptionFile" class="form-label">Upload Prescription</label>
+                                            <input class="form-control" type="file" id="prescriptionFile" name="prescriptionFile">
+                                            <div class="form-text">Supported formats: PDF, JPG, PNG. Max size: 5MB</div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="notes" class="form-label">Additional Notes</label>
+                                            <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Any additional information..."></textarea>
+                                        </div>
+                                        
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-upload"></i> Upload Prescription
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Recent Uploads</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Patient</th>
+                                                    <th>Physician</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>John Doe</td>
+                                                    <td>Dr. Smith</td>
+                                                    <td>June 15, 2023</td>
+                                                    <td><span class="badge bg-success">Processed</span></td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary" title="View">
+                                                                <i class="fas fa-eye"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-info" title="Download">
+                                                                <i class="fas fa-download"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mary Smith</td>
+                                                    <td>Dr. Johnson</td>
+                                                    <td>June 10, 2023</td>
+                                                    <td><span class="badge bg-warning">Pending</span></td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary" title="View">
+                                                                <i class="fas fa-eye"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-info" title="Download">
+                                                                <i class="fas fa-download"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5>How to Upload</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li>Select the patient for whom you're uploading the prescription</li>
+                                        <li>Enter the prescribing physician's name</li>
+                                        <li>Choose the prescription file from your device</li>
+                                        <li>Add any additional notes if necessary</li>
+                                        <li>Click "Upload Prescription" to submit</li>
+                                    </ol>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle"></i>
+                                        Our system will process the prescription and create medication records automatically.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

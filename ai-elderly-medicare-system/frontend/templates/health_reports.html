@@ -1,0 +1,337 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Health Reports - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Health Reports</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+      </div>
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+        <span data-feather="calendar"></span>
+        This week
+      </button>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="card-title">Total Patients</h5>
+              <h2>1,248</h2>
+            </div>
+            <i class="fas fa-users fa-2x"></i>
+          </div>
+          <div class="mt-2">
+            <span class="text-success"><i class="fas fa-arrow-up"></i> 5.2%</span>
+            <span class="text-muted">from last month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="card-title">Active Treatments</h5>
+              <h2>864</h2>
+            </div>
+            <i class="fas fa-pills fa-2x"></i>
+          </div>
+          <div class="mt-2">
+            <span class="text-success"><i class="fas fa-arrow-up"></i> 3.1%</span>
+            <span class="text-muted">from last month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="card-title">Pending Reviews</h5>
+              <h2>42</h2>
+            </div>
+            <i class="fas fa-exclamation-circle fa-2x"></i>
+          </div>
+          <div class="mt-2">
+            <span class="text-danger"><i class="fas fa-arrow-up"></i> 12.4%</span>
+            <span class="text-muted">from last month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card text-white bg-info">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="card-title">Avg. Recovery Time</h5>
+              <h2>18.5 days</h2>
+            </div>
+            <i class="fas fa-clock fa-2x"></i>
+          </div>
+          <div class="mt-2">
+            <span class="text-success"><i class="fas fa-arrow-down"></i> 2.3 days</span>
+            <span class="text-muted">from last month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Patient Health Trends</h5>
+          <div>
+            <button class="btn btn-sm btn-outline-secondary me-2">
+              <i class="fas fa-download"></i> Export
+            </button>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                Filter
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Last 7 days</a></li>
+                <li><a class="dropdown-item" href="#">Last 30 days</a></li>
+                <li><a class="dropdown-item" href="#">Last 90 days</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <canvas id="healthTrendsChart" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Condition Distribution</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="conditionChart" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Recent Health Reports</h5>
+          <div>
+            <button class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-plus"></i> Generate Report
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Condition</th>
+                  <th>Last Checkup</th>
+                  <th>Status</th>
+                  <th>Next Appointment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2 bg-light rounded-circle text-center" style="width: 32px; height: 32px;">
+                        <span class="text-primary">R</span>
+                      </div>
+                      <div>
+                        <div>Robert Johnson</div>
+                        <small class="text-muted">#PT-00124</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Diabetes Type 2</td>
+                  <td>Jun 12, 2023</td>
+                  <td><span class="badge bg-success">Stable</span></td>
+                  <td>Jul 12, 2023</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2 bg-light rounded-circle text-center" style="width: 32px; height: 32px;">
+                        <span class="text-danger">M</span>
+                      </div>
+                      <div>
+                        <div>Mary Williams</div>
+                        <small class="text-muted">#PT-00356</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Hypertension</td>
+                  <td>Jun 14, 2023</td>
+                  <td><span class="badge bg-warning">Monitoring</span></td>
+                  <td>Jun 28, 2023</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2 bg-light rounded-circle text-center" style="width: 32px; height: 32px;">
+                        <span class="text-success">D</span>
+                      </div>
+                      <div>
+                        <div>David Brown</div>
+                        <small class="text-muted">#PT-00789</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Arthritis</td>
+                  <td>Jun 10, 2023</td>
+                  <td><span class="badge bg-success">Stable</span></td>
+                  <td>Jul 10, 2023</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2 bg-light rounded-circle text-center" style="width: 32px; height: 32px;">
+                        <span class="text-info">S</span>
+                      </div>
+                      <div>
+                        <div>Susan Miller</div>
+                        <small class="text-muted">#PT-00234</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Osteoporosis</td>
+                  <td>Jun 15, 2023</td>
+                  <td><span class="badge bg-danger">Critical</span></td>
+                  <td>Jun 22, 2023</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <nav aria-label="Report pagination">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Health Trends Chart
+    const healthTrendsCtx = document.getElementById('healthTrendsChart').getContext('2d');
+    const healthTrendsChart = new Chart(healthTrendsCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          {
+            label: 'Blood Pressure',
+            data: [135, 142, 138, 132, 128, 125],
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1,
+            fill: false
+          },
+          {
+            label: 'Cholesterol',
+            data: [220, 215, 210, 205, 200, 195],
+            borderColor: 'rgb(54, 162, 235)',
+            tension: 0.1,
+            fill: false
+          },
+          {
+            label: 'Glucose',
+            data: [145, 150, 148, 142, 138, 135],
+            borderColor: 'rgb(255, 205, 86)',
+            tension: 0.1,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+    
+    // Condition Distribution Chart
+    const conditionCtx = document.getElementById('conditionChart').getContext('2d');
+    const conditionChart = new Chart(conditionCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Diabetes', 'Hypertension', 'Arthritis', 'Osteoporosis', 'Other'],
+        datasets: [{
+          data: [35, 25, 20, 15, 5],
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(153, 102, 255)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

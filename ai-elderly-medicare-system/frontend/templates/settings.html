@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare AI - Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --primary-dark: #4B0082;
+            --primary-light: #9370DB;
+            --secondary: #FF6B8B;
+            --accent: #FFA500;
+            --light: rgba(255, 255, 255, 0.9);
+            --dark: #2F1B4B;
+            --success: #00C9A7;
+            --warning: #FFC75F;
+            --danger: #FF8066;
+            --info: #4FC4F7;
+            --gray: #8395a7;
+            --light-gray: rgba(236, 240, 241, 0.5);
+            --sidebar-width: 280px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #8A2BE2, #4B0082, #FF6B8B, #FFA500, #9370DB);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 40px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(43, 7, 89, 0.5);
+            color: white;
+            backdrop-filter: blur(15px);
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+            position: relative;
+            height: 100%;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(107, 36, 178, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .sidebar-header img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary-light);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--secondary);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 107, 139, 0.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn, .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .notification-btn:hover, .user-profile:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Settings Content */
+        .settings-container {
+            padding: 30px;
+            overflow-y: auto;
+            height: calc(100vh - var(--header-height) - 40px);
+        }
+
+        .settings-section {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px 0 var(--glass-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .settings-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header i {
+            color: var(--primary-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-label span {
+            font-size: 0.9rem;
+            color: var(--light);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-content {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        /* Theme selector */
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .theme-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-option.active {
+            border-color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .settings-container {
+                padding: 15px;
+            }
+
+            .settings-section {
+                padding: 20px 15px;
+            }
+
+            .section-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Menu Toggle Button */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hide menu toggle on larger screens */
+        @media (min-width: 993px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Form row for multiple columns */
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        /* Text muted */
+        .text-muted {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 0.85rem;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+        }
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c3e50;
+        color: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding: 20px 0;
+        overflow-y: auto;
+    }
+
+    .logo {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .logo h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-links li {
+        margin: 5px 0;
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .nav-links a.active {
+        background: #3498db;
+        color: white;
+        border-left: 4px solid #fff;
+    }
+
+    .nav-links a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 15px 0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .sidebar {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .logo h2, .nav-links span {
+            display: none;
+        }
+
+        .nav-links a {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .nav-links a i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+    }
+    </style>
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="css/navigation.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+            <!-- Navigation will be loaded here -->
+            <div id="nav-placeholder"></div>
+    <div class="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        
+            
+            
+
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h1><i class="fas fa-cog"></i> System Settings</h1>
+                </div>
+                <div class="user-actions">
+                    <div class="notification-btn">
+                        <i class="far fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <i class="far fa-user"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="settings-container">
+                <!-- Profile Settings -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-user-circle"></i> Profile Information</h2>
+                    </div>
+                    <form id="profileForm">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="fullName">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" value="Dr. John Doe">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="specialization">Specialization</label>
+                                    <input type="text" class="form-control" id="specialization" value="Cardiologist">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <textarea class="form-control" id="bio" rows="3" placeholder="Tell us about yourself...">Experienced cardiologist with over 10 years of practice in cardiovascular diseases and treatments.</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Profile Photo</label>
+                            <div class="custom-file">
+                                <input type="file" class="form-control" id="profilePhoto">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-shield-alt"></i> Security Settings</h2>
+                    </div>
+                    <form id="securityForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="twoFactorAuth" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Enable Two-Factor Authentication</span>
+                            </div>
+                            <p class="text-muted">Add an extra layer of security to your account</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="loginAlerts" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Login Alerts</span>
+                            </div>
+                            <p class="text-muted">Get notified when someone logs into your account from a new device</p>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Update Security Settings
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-bell"></i> Notification Preferences</h2>
+                    </div>
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Email Notifications</span>
+                            </div>
+                            <p class="text-muted">Receive email notifications for important updates</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>SMS Notifications</span>
+                            </div>
+                            <p class="text-muted">Receive text messages for urgent notifications</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Appointment Reminders</span>
+                            </div>
+                            <p class="text-muted">Get reminders for upcoming appointments</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Medication Alerts</span>
+                            </div>
+                            <p class="text-muted">Receive alerts for medication schedules</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Newsletter</span>
+                            </div>
+                            <p class="text-muted">Receive our monthly newsletter with updates</p>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-bell"></i> Save Preferences
+                        </button>
+                    </form>
+                </div>
+
+                <!-- System Preferences -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-desktop"></i> System Preferences</h2>
+                    </div>
+                    <form id="systemForm">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="language">Language</label>
+                                    <select class="form-control" id="language">
+                                        <option>English (US)</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                        <option>German</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="timezone">Time Zone</label>
+                                    <select class="form-control" id="timezone">
+                                        <option>(UTC-05:00) Eastern Time (US & Canada)</option>
+                                        <option>(UTC-06:00) Central Time (US & Canada)</option>
+                                        <option>(UTC-07:00) Mountain Time (US & Canada)</option>
+                                        <option>(UTC-08:00) Pacific Time (US & Canada)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="theme">Theme</label>
+                            <select class="form-control" id="theme">
+                                <option>Light</option>
+                                <option>Dark</option>
+                                <option>System Default</option>
+                            </select>
+                            
+                            <div class="theme-selector">
+                                <div class="theme-option active" style="background: linear-gradient(135deg, #8A2BE2, #4B0082, #FF6B8B);"></div>
+                                <div class="theme-option" style="background: linear-gradient(135deg, #1E3A8A, #3B82F6, #10B981);"></div>
+                                <div class="theme-option" style="background: linear-gradient(135deg, #DC2626, #EA580C, #F59E0B);"></div>
+                                <div class="theme-option" style="background: linear-gradient(135deg, #0F172A, #1E293B, #475569);"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Auto-save changes</span>
+                            </div>
+                            <p class="text-muted">Automatically save changes made in forms</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>AI Recommendations</span>
+                            </div>
+                            <p class="text-muted">Allow AI to provide personalized recommendations</p>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Preferences
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Medication Reminder Settings -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-clock"></i> Medication Reminder Settings</h2>
+                    </div>
+                    <form id="reminderForm">
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Enable Medication Reminders</span>
+                            </div>
+                            <p class="text-muted">Receive reminders for medication schedules</p>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="reminderTime">Default Reminder Time</label>
+                                    <input type="time" class="form-control" id="reminderTime" value="08:00">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="reminderOffset">Reminder Offset (minutes)</label>
+                                    <input type="number" class="form-control" id="reminderOffset" value="15" min="5" max="60">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Reminder Methods</label>
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Push Notifications</span>
+                            </div>
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Email Reminders</span>
+                            </div>
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>SMS Reminders</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reminderFrequency">Reminder Frequency</label>
+                            <select class="form-control" id="reminderFrequency">
+                                <option>Once</option>
+                                <option selected>Daily</option>
+                                <option>Weekly</option>
+                                <option>Monthly</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-bell"></i> Save Reminder Settings
+                        </button>
+                    </form>
+                </div>
+
+                <!-- AI Assistant Settings -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-robot"></i> AI Assistant Settings</h2>
+                    </div>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <h3 class="card-title">Medication Prediction</h3>
+                            </div>
+                            <div class="card-content">
+                                AI predicts medication needs based on patient history and current health conditions.
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <h3 class="card-title">Appointment Scheduling</h3>
+                            </div>
+                            <div class="card-content">
+                                AI optimizes appointment scheduling based on doctor availability and patient urgency.
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <h3 class="card-title">Health Monitoring</h3>
+                            </div>
+                            <div class="card-content">
+                                Continuous health monitoring with AI-powered anomaly detection and alerts.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <form id="aiForm">
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Enable AI Assistant</span>
+                            </div>
+                            <p class="text-muted">Allow AI to assist in patient care and management</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Personalized Recommendations</span>
+                            </div>
+                            <p class="text-muted">AI provides personalized treatment recommendations</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="toggle-label">
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Automated Follow-ups</span>
+                            </div>
+                            <p class="text-muted">AI automatically schedules follow-up appointments based on patient progress</p>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-robot"></i> Save AI Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <script>
+        // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session
+            localStorage.removeItem('user');
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    });
+        // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session
+            localStorage.removeItem('user');
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    });
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Form submission handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Show success message
+                alert('Settings saved successfully!');
+            });
+        });
+
+        // Theme selector
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // In a real application, this would change the theme
+                alert('Theme changed!');
+            });
+        });
+
+        // Main Settings Module
+const SettingsManager = (() => {
+    // Initialize settings
+    const init = () => {
+        loadTheme();
+        setupEventListeners();
+        initFormValidation();
+    };
+
+    // Theme Management
+    const loadTheme = () => {
+        const savedTheme = localStorage.getItem('theme') || 'default';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeSelector(savedTheme);
+    };
+
+    const updateThemeSelector = (theme) => {
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.classList.toggle('active', option.dataset.theme === theme);
+        });
+    };
+
+    // Event Listeners
+    const setupEventListeners = () => {
+        // Theme selection
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const theme = e.currentTarget.dataset.theme;
+                setTheme(theme);
+            });
+        });
+
+        // Form submissions
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', handleFormSubmit);
+        });
+
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(toggle => {
+            toggle.addEventListener('click', togglePasswordVisibility);
+        });
+    };
+
+    // Theme Functions
+    const setTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        updateThemeSelector(theme);
+    };
+
+    // Form Handling
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (validateForm(e.target)) {
+            saveFormData(e.target);
+            showToast('Settings saved successfully!', 'success');
+        }
+    };
+
+    const validateForm = (form) => {
+        let isValid = true;
+        form.querySelectorAll('[required]').forEach(field => {
+            if (!field.value.trim()) {
+                showError(field, 'This field is required');
+                isValid = false;
+            } else if (field.type === 'email' && !isValidEmail(field.value)) {
+                showError(field, 'Please enter a valid email');
+                isValid = false;
+            } else if (field.type === 'password' && field.id === 'newPassword' && !isStrongPassword(field.value)) {
+                showError(field, 'Password must be at least 8 characters with a number and uppercase letter');
+                isValid = false;
+            }
+        });
+        return isValid;
+    };
+
+    // Helper Functions
+    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    
+    const isStrongPassword = (password) => {
+        return password.length >= 8 && /[A-Z]/.test(password) && /[0-9]/.test(password);
+    };
+
+    const showError = (field, message) => {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        field.classList.add('error');
+        field.parentNode.insertBefore(errorDiv, field.nextSibling);
+    };
+
+    const clearErrors = (form) => {
+        form.querySelectorAll('.error-message').forEach(error => error.remove());
+        form.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+    };
+
+    const saveFormData = (form) => {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        localStorage.setItem(`form_${form.id}`, JSON.stringify(data));
+    };
+
+    const togglePasswordVisibility = (e) => {
+        const button = e.currentTarget;
+        const input = button.previousElementSibling;
+        const isPassword = input.type === 'password';
+        
+        input.type = isPassword ? 'text' : 'password';
+        button.innerHTML = isPassword ? 
+            '<i class="fas fa-eye-slash"></i>' : 
+            '<i class="fas fa-eye"></i>';
+    };
+
+    const showToast = (message, type = 'info') => {
+        // Simple toast implementation
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    };
+
+    // Public API
+    return { init };
+})();
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    SettingsManager.init();
+    
+    // Add any additional initialization here
+    console.log('Settings page initialized');
+});
+fetch('navigation.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('nav-placeholder').innerHTML = data;
+        });
+        </script>
+    <!-- Load navigation -->
+    <script>
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                // Initialize main content margin
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.marginLeft = '250px';
+                    mainContent.style.padding = '20px';
+                    mainContent.style.transition = 'margin-left 0.3s ease';
+                }
+                
+                // Add click event for menu toggle
+                const menuToggle = document.getElementById('menuToggle');
+                const sidebar = document.querySelector('.sidebar');
+                if (menuToggle && sidebar) {
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                        }
+                    });
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+
+    <!-- Load navigation -->
+    <script>
+        // Load navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => {
+                const navPlaceholder = document.getElementById('nav-placeholder');
+                if (navPlaceholder) {
+                    navPlaceholder.innerHTML = data;
+                    
+                    // Initialize main content margin
+                    const mainContent = document.querySelector('.main-content, main, .container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '250px';
+                        mainContent.style.padding = '20px';
+                        mainContent.style.transition = 'margin-left 0.3s ease';
+                    }
+                    
+                    // Add click event for menu toggle
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    if (menuToggle && sidebar) {
+                        menuToggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('active');
+                            const mainContent = document.querySelector('.main-content, main, .container');
+                            if (mainContent) {
+                                mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+                            }
+                        });
+                    }
+                }
+            });
+    </script>
+</body></html>

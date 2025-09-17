@@ -1,0 +1,41 @@
+{% extends "base/base.html" %}
+
+{% block title %}Test Sidebar{% endblock %}
+
+{% block page_title %}Test Sidebar Functionality{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Sidebar Test</h5>
+            </div>
+            <div class="card-body">
+                <p>This page is for testing the sidebar functionality.</p>
+                <p>Click the three dots (hamburger icon) in the sidebar to toggle it between expanded and collapsed states.</p>
+                <p>On desktop, when collapsed, hover over menu items to see submenus.</p>
+                <p>On mobile, the sidebar will slide in and out.</p>
+                
+                <button id="toggleSidebarBtn" class="btn btn-primary">Toggle Sidebar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('toggleSidebarBtn');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            const sidebarToggler = document.querySelector('.sidebar-toggler');
+            if (sidebarToggler) {
+                sidebarToggler.click();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

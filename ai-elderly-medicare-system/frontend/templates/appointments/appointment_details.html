@@ -1,0 +1,222 @@
+{% extends "base/base.html" %}
+
+{% block title %}Appointment Details - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Appointment Details</h4>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('appointments.edit_appointment', appointment_id=appointment.id) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{{ url_for('appointments.calendar') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-calendar"></i> Calendar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Appointment Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <td><strong>Appointment ID:</strong></td>
+                                                    <td>APT-00123</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Date & Time:</strong></td>
+                                                    <td>June 15, 2023 at 10:00 AM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Duration:</strong></td>
+                                                    <td>30 minutes</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Type:</strong></td>
+                                                    <td>Regular Checkup</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <td><strong>Status:</strong></td>
+                                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Doctor:</strong></td>
+                                                    <td>Dr. Smith (Cardiology)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Patient:</strong></td>
+                                                    <td>John Doe</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Location:</strong></td>
+                                                    <td>Cardiology Department, Room 205</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <p><strong>Reason for Appointment:</strong></p>
+                                            <p>Regular checkup for hypertension management and general health assessment.</p>
+                                            
+                                            <p><strong>Additional Notes:</strong></p>
+                                            <p>Patient reports slight dizziness in the mornings. Continue current medication regimen.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5>Medical History</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Blood Pressure</th>
+                                                    <th>Heart Rate</th>
+                                                    <th>Weight</th>
+                                                    <th>Notes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>May 15, 2023</td>
+                                                    <td>122/82 mmHg</td>
+                                                    <td>75 bpm</td>
+                                                    <td>71 kg</td>
+                                                    <td>Patient reports improved sleep quality</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>April 15, 2023</td>
+                                                    <td>125/85 mmHg</td>
+                                                    <td>78 bpm</td>
+                                                    <td>72 kg</td>
+                                                    <td>Continue current medication</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button type="button" class="btn btn-success">
+                                            <i class="fas fa-check-circle"></i> Mark as Completed
+                                        </button>
+                                        <button type="button" class="btn btn-warning">
+                                            <i class="fas fa-clock"></i> Reschedule
+                                        </button>
+                                        <button type="button" class="btn btn-danger">
+                                            <i class="fas fa-times-circle"></i> Cancel Appointment
+                                        </button>
+                                        <button type="button" class="btn btn-info">
+                                            <i class="fas fa-bell"></i> Send Reminder
+                                        </button>
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fas fa-print"></i> Print Confirmation
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5>Appointment Timeline</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="timeline">
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-success">
+                                                <i class="fas fa-calendar-check"></i>
+                                            </div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h6 class="timeline-title">Appointment Booked</h6>
+                                                    <p class="text-muted">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-clock"></i> June 1, 2023 at 2:30 PM
+                                                        </small>
+                                                    </p>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>Appointment booked by John Doe</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-primary">
+                                                <i class="fas fa-bell"></i>
+                                            </div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h6 class="timeline-title">Reminder Sent</h6>
+                                                    <p class="text-muted">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-clock"></i> June 14, 2023 at 9:00 AM
+                                                        </small>
+                                                    </p>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>SMS reminder sent to patient</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-warning">
+                                                <i class="fas fa-user-check"></i>
+                                            </div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h6 class="timeline-title">Appointment Confirmed</h6>
+                                                    <p class="text-muted">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-clock"></i> June 14, 2023 at 2:15 PM
+                                                        </small>
+                                                    </p>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>Patient confirmed attendance via SMS</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

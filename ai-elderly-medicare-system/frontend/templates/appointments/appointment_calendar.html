@@ -1,0 +1,189 @@
+{% extends "base/base.html" %}
+
+{% block title %}Appointment Calendar - AI Elderly Medicare System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Appointment Calendar</h4>
+                        <a href="{{ url_for('appointments.book_appointment') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-calendar-plus"></i> Book Appointment
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Quick Filters</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="filterPatient" class="form-label">Patient</label>
+                                        <select class="form-select" id="filterPatient">
+                                            <option selected>All Patients</option>
+                                            <option>John Doe</option>
+                                            <option>Mary Smith</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="filterDoctor" class="form-label">Doctor</label>
+                                        <select class="form-select" id="filterDoctor">
+                                            <option selected>All Doctors</option>
+                                            <option>Dr. Smith</option>
+                                            <option>Dr. Johnson</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="filterStatus" class="form-label">Status</label>
+                                        <select class="form-select" id="filterStatus">
+                                            <option selected>All Statuses</option>
+                                            <option>Scheduled</option>
+                                            <option>Completed</option>
+                                            <option>Cancelled</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary w-100">
+                                        <i class="fas fa-filter"></i> Apply Filters
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5>Today's Appointments</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong>John Doe</strong>
+                                                    <br><small class="text-muted">Dr. Smith - Cardiology</small>
+                                                </div>
+                                                <span class="badge bg-primary">10:00 AM</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong>Mary Smith</strong>
+                                                    <br><small class="text-muted">Dr. Johnson - General</small>
+                                                </div>
+                                                <span class="badge bg-primary">2:30 PM</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5>June 2023</h5>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-primary">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary">
+                                                Today
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sun</th>
+                                                    <th>Mon</th>
+                                                    <th>Tue</th>
+                                                    <th>Wed</th>
+                                                    <th>Thu</th>
+                                                    <th>Fri</th>
+                                                    <th>Sat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="p-3">28</td>
+                                                    <td class="p-3">29</td>
+                                                    <td class="p-3">30</td>
+                                                    <td class="p-3">31</td>
+                                                    <td class="p-3">1</td>
+                                                    <td class="p-3">2</td>
+                                                    <td class="p-3">3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-3">4</td>
+                                                    <td class="p-3">5</td>
+                                                    <td class="p-3">6</td>
+                                                    <td class="p-3">7</td>
+                                                    <td class="p-3">8</td>
+                                                    <td class="p-3">9</td>
+                                                    <td class="p-3">10</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-3">11</td>
+                                                    <td class="p-3">12</td>
+                                                    <td class="p-3">13</td>
+                                                    <td class="p-3">14</td>
+                                                    <td class="p-3">
+                                                        15
+                                                        <div class="mt-1">
+                                                            <span class="badge bg-primary" title="John Doe - Dr. Smith">10:00 AM</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-3">16</td>
+                                                    <td class="p-3">17</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-3">18</td>
+                                                    <td class="p-3">19</td>
+                                                    <td class="p-3">20</td>
+                                                    <td class="p-3">21</td>
+                                                    <td class="p-3">
+                                                        22
+                                                        <div class="mt-1">
+                                                            <span class="badge bg-primary" title="Mary Smith - Dr. Johnson">2:30 PM</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-3">23</td>
+                                                    <td class="p-3">24</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-3">25</td>
+                                                    <td class="p-3">26</td>
+                                                    <td class="p-3">27</td>
+                                                    <td class="p-3">28</td>
+                                                    <td class="p-3">29</td>
+                                                    <td class="p-3">30</td>
+                                                    <td class="p-3">1</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

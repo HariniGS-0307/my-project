@@ -1,0 +1,19 @@
+[credentials]
+    [credentials.usernames]
+        [credentials.usernames.admin]
+            name = "Admin User"
+            password = "admin123"
+        [credentials.usernames.caregiver]
+            name = "Caregiver User"
+            password = "caregiver123"
+        [credentials.usernames.patient]
+            name = "Patient User"
+            password = "patient123"
+
+[cookie]
+    expiry_days = 30
+    key = "ai_elderly_medicare_key"
+    name = "ai_elderly_medicare_cookie"
+
+[preauthorized]
+    [preauthorized.emails]
